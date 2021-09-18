@@ -1,0 +1,50 @@
+import React, { useState } from "react";
+import "./SignIn.css";
+import axios from "axios";
+import InputBox from "../sub_components/InputBox/InputBox";
+
+const SignIn = () => {
+  const [email, set_email] = useState("");
+  const [password, set_password] = useState("");
+
+  const HandleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post("https://xamify.herokuapp.com/api/auth/login", {
+        email: "admin@xamify.com",
+        password: "zLnNe7tYh^uvH#Qi",
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        return;
+      });
+  };
+
+  return (
+    <form className="sgIn" onSubmit={HandleSubmit}>
+      <div className="sg-1">
+        <h1>Sign In to your account.</h1>
+        <h2>And get the most of Xamify.</h2>
+      </div>
+      <div className="sg-2">
+        <InputBox
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChangeCallback={(e) => set_email(e.target.value.trim())}
+        />
+        <InputBox
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChangeCallback={(e) => set_password(e.target.value.trim())}
+        />
+      </div>
+      <button className="sg-btn">SignIn</button>
+    </form>
+  );
+};
+
+export default SignIn;

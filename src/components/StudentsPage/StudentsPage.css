@@ -1,0 +1,111 @@
+.stud-page {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  background: #f1faff;
+  height: 100%;
+  margin-left: 25.5%;
+  min-height: 100vh;
+}
+.stud-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: space-between;
+}
+.s-title {
+  margin-bottom: 8%;
+  margin-top: 8%;
+  margin-left: 3%;
+  color: #2c6588;
+  font-weight: 500;
+  letter-spacing: 1px;
+  font-size: 2.5rem;
+}
+.stud-title > button {
+  align-self: center;
+  align-items: center;
+  appearance: none;
+  border-radius: 4px;
+  border-style: none;
+  box-shadow: rgba(0, 0, 0, 0.2) 0 3px 1px -2px, rgba(0, 0, 0, 0.14) 0 2px 2px 0,
+    rgba(0, 0, 0, 0.12) 0 1px 5px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: Roboto, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 500;
+  height: 36px;
+  justify-content: center;
+  letter-spacing: 0.0892857em;
+  line-height: normal;
+  min-width: 64px;
+  outline: none;
+  overflow: visible;
+  padding: 0 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  will-change: transform, opacity;
+  padding: 2%;
+  margin-right: 5%;
+}
+.stud-title > button:hover {
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 4px -1px, rgba(0, 0, 0, 0.14) 0 4px 5px 0,
+    rgba(0, 0, 0, 0.12) 0 1px 10px 0;
+}
+.stud-title > button:disabled {
+  background-color: rgba(0, 0, 0, 0.12);
+  box-shadow: rgba(0, 0, 0, 0.2) 0 0 0 0, rgba(0, 0, 0, 0.14) 0 0 0 0,
+    rgba(0, 0, 0, 0.12) 0 0 0 0;
+  color: rgba(0, 0, 0, 0.37);
+  cursor: default;
+  pointer-events: none;
+}
+.stud-title > button:not(:disabled) {
+  background-color: #2c6588;
+}
+.stud-title > button:focus {
+  box-shadow: rgba(0, 0, 0, 0.2) 0 2px 4px -1px, rgba(0, 0, 0, 0.14) 0 4px 5px 0,
+    rgba(0, 0, 0, 0.12) 0 1px 10px 0;
+}
+.stud-title > button:active {
+  box-shadow: rgba(0, 0, 0, 0.2) 0 5px 5px -3px,
+    rgba(0, 0, 0, 0.14) 0 8px 10px 1px, rgba(0, 0, 0, 0.12) 0 3px 14px 2px;
+  background: #2c6588;
+}
+.st_2{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.st_2_1{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+.st_2_1 > input{
+    width: 70%;
+    border-radius: 5px;
+    font-size: 2rem;
+    padding: 0.5%;
+}
+.st_2_2{
+    margin-top: 4%;
+    display: grid;
+    grid-template-columns: 4fr 4fr;
+}
+.st_2_2 > div{
+    margin: 2%;
+}
+

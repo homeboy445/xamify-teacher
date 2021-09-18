@@ -1,0 +1,188 @@
+.db-info-bx {
+  z-index: 11111111;
+  position: absolute;
+  top: 30%;
+  left: 50%;
+  display: flex;
+  width: 50%;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  padding: 4%;
+  background: #8e2de2; /* fallback for old browsers */
+  background: -webkit-linear-gradient(
+    to right,
+    #4a00e0,
+    #8e2de2
+  ); /* Chrome 10-25, Safari 5.1-6 */
+  background: linear-gradient(
+    to right,
+    #4a00e0,
+    #8e2de2
+  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+    rgba(0, 0, 0, 0.22) 0px 15px 12px;
+  border-radius: 5px;
+}
+.info_title {
+  font-size: 2.6rem;
+  font-weight: 500;
+  text-shadow: 1px 1px 1px black;
+}
+.info_title_1 {
+    margin-top: -2%;
+    margin-bottom: 4%;
+  width: 100%;
+  font-size: 1rem;
+  font-weight: 400;
+  text-align: center;
+}
+.info_bx_1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.info_bx_1 > div:nth-child(1) {
+  margin-right: -16%;
+  height: 70px;
+}
+.info_bx_1 > div:nth-child(1) {
+  border: 2px solid white;
+}
+.info_bx_1 > div:nth-child(1) > input {
+  color: white;
+  border-bottom: 2px solid white;
+}
+.info_bx_1 > div:nth-child(2) {
+  border: 2px solid white;
+}
+.info_bx_1 > div:nth-child(2) > input {
+  color: white;
+  border-bottom: 2px solid white;
+}
+.info_bx_1 > div:nth-child(1) > input:focus {
+  border-bottom: 2px solid cyan;
+}
+.info_bx_1 > div:nth-child(1) > img {
+  width: 10%;
+}
+.info_bx_1 > div:nth-child(2) > img {
+  width: 10%;
+}
+.info_bx_1 > div:nth-child(2) {
+  height: 70px;
+}
+.info_bx_1 > div:nth-child(2) > input:focus {
+  border-bottom: 2px solid cyan;
+}
+.info_eml > div {
+  width: 760px;
+}
+.info_eml > div {
+  border: 2px solid white;
+}
+.info_eml > div > input {
+  color: white;
+  border-bottom: 2px solid white;
+}
+.info_eml > div > input:focus {
+  border-bottom: 2px solid cyan;
+}
+.usr_drp_down {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+.usr_drp_down > select:nth-child(1) {
+  margin-bottom: 2%;
+}
+.inf_btns {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  width: 100%;
+}
+.add_usr_btn {
+  align-self: center;
+  appearance: button;
+  backface-visibility: hidden;
+  background-color: #405cf5;
+  border-radius: 6px;
+  border-width: 0;
+  box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
+    rgba(50, 50, 93, 0.1) 0 2px 5px 0, rgba(0, 0, 0, 0.07) 0 1px 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+    Ubuntu, sans-serif;
+  font-size: 100%;
+  height: 44px;
+  line-height: 1.15;
+  margin: 12px 0 0;
+  outline: none;
+  overflow: hidden;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transform: translateZ(0);
+  transition: all 0.2s, box-shadow 0.08s ease-in;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-top: 5%;
+  width: 30%;
+}
+.add_usr_btn:disabled {
+  cursor: default;
+}
+.add_usr_btn:focus {
+  box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
+    rgba(50, 50, 93, 0.2) 0 6px 15px 0, rgba(0, 0, 0, 0.1) 0 2px 2px 0,
+    rgba(50, 151, 211, 0.3) 0 0 0 4px;
+}
+.inf_btns > button:nth-child(2) {
+  align-self: center;
+  appearance: button;
+  backface-visibility: hidden;
+  background-color: #ff3800;
+  border-radius: 6px;
+  border-width: 0;
+  box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
+    rgba(50, 50, 93, 0.1) 0 2px 5px 0, rgba(0, 0, 0, 0.07) 0 1px 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  font-family: -apple-system, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+    Ubuntu, sans-serif;
+  font-size: 100%;
+  height: 44px;
+  line-height: 1.15;
+  margin: 12px 0 0;
+  outline: none;
+  overflow: hidden;
+  padding: 0 25px;
+  position: relative;
+  text-align: center;
+  text-transform: none;
+  transform: translateZ(0);
+  transition: all 0.2s, box-shadow 0.08s ease-in;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  margin-top: 5%;
+  width: 30%;
+  margin-left: 6%;
+}
+.inf_btns > button:nth-child(2):disabled {
+  cursor: default;
+}
+.inf_btns > button:nth-child(2):focus {
+  box-shadow: rgba(50, 50, 93, 0.1) 0 0 0 1px inset,
+    rgba(93, 50, 50, 0.2) 0 6px 15px 0, rgba(0, 0, 0, 0.1) 0 2px 2px 0,
+    rgba(211, 50, 50, 0.3) 0 0 0 4px;
+}
