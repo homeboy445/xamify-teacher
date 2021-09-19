@@ -33,7 +33,9 @@ const Dashboard = () => {
     <div className="dashboard">
       <div className="db-titl">
         <h1 className="d-title">Dashboard</h1>
-        <button>Create Tests + </button>
+        <button onClick={
+          ()=>window.location.href="/examdetails"
+        }>Create Tests + </button>
       </div>
       <div className="dashboard-1">
         <div className="Active">

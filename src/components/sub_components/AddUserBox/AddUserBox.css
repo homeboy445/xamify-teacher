@@ -1,4 +1,4 @@
-.db-info-bx {
+.s_box {
   z-index: 11111111;
   position: absolute;
   top: 30%;
@@ -25,14 +25,229 @@
     rgba(0, 0, 0, 0.22) 0px 15px 12px;
   border-radius: 5px;
 }
+.s_box_btns {
+  display: flex;
+  width: 100%;
+  justify-content: right;
+  align-content: right;
+}
+.s_box_btns > button:nth-child(1) {
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #fa6400;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 3rem;
+  padding: calc(0.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+.s_box_btns > button:nth-child(1):hover,
+.s_box_btns > button:nth-child(1):focus {
+  background-color: #fb8332;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+.s_box_btns > button:nth-child(1):hover {
+  transform: translateY(-1px);
+}
+.s_box_btns > button:nth-child(1):active {
+  background-color: #c85000;
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  transform: translateY(0);
+}
+.s_box_btns > button:nth-child(2) {
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #11dafd;
+  border: 1px solid transparent;
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 3rem;
+  padding: calc(0.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+.s_box_btns > button:nth-child(2):hover,
+.s_box_btns > button:nth-child(2):focus {
+  background-color: #11dafd;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+.s_box_btns > button:nth-child(2):hover {
+  transform: translateY(-1px);
+}
+.s_box_btns > button:nth-child(2):active {
+  background-color: #0c9fb9;
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  transform: translateY(0);
+}
+.bulk_stud {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin: 5%;
+}
+.bulk_stud_btns {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 4%;
+  width: 60%;
+}
+.bulk_stud_btns > input[type="file"] {
+  position: absolute;
+}
+.bulk_stud_btns > label {
+  text-align: center;
+  width: 50%;
+  appearance: none;
+  background-color: #fafbfc;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
+    rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292e;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
+}
+.bulk_stud_btns > label:hover {
+  background-color: #f3f4f6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+.bulk_stud_btns > label:disabled {
+  background-color: #fafbfc;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959da5;
+  cursor: default;
+}
+.bulk_stud_btns > label:active {
+  background-color: #edeff2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+.bulk_stud_btns > label:focus {
+  outline: 1px transparent;
+}
+.bulk_stud_btns > label:before {
+  display: none;
+}
+.bulk_stud_btns > label:-webkit-details-marker {
+  display: none;
+}
+.bulk_stud_btns > a{
+    width: 50%;
+    margin-right: 4%;
+}
+.dwnload_csv{
+  width: 100%;
+  margin-right: 5%;
+  appearance: none;
+  background-color: #2ea44f;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.1) 0 1px 0;
+  box-sizing: border-box;
+  color: #fff;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 20px;
+  padding: 6px 16px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+.bulk_stud_btns > button:focus:not(:focus-visible):not(.focus-visible) {
+  box-shadow: none;
+  outline: none;
+}
+.bulk_stud_btns > button:hover {
+  background-color: #2c974b;
+}
+.bulk_stud_btns > button:focus {
+  box-shadow: rgba(46, 164, 79, 0.4) 0 0 0 3px;
+  outline: none;
+}
+.bulk_stud_btns > button:disabled {
+  background-color: #94d3a2;
+  border-color: rgba(27, 31, 35, 0.1);
+  color: rgba(255, 255, 255, 0.8);
+  cursor: default;
+}
+.bulk_stud_btns > button:active {
+  background-color: #298e46;
+  box-shadow: rgba(20, 70, 32, 0.2) 0 1px 0 inset;
+}
 .info_title {
+  text-align: center;
   font-size: 2.6rem;
   font-weight: 500;
   text-shadow: 1px 1px 1px black;
 }
 .info_title_1 {
-    margin-top: -2%;
-    margin-bottom: 4%;
+  margin-top: -2%;
+  margin-bottom: 4%;
   width: 100%;
   font-size: 1rem;
   font-weight: 400;

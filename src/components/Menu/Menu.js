@@ -1,5 +1,7 @@
 import React from "react";
 import "./Menu.css";
+import { Link } from "react-router-dom";
+import Cookie from 'js-cookie';
 import Dashboard_Icon from "../../assets/icons/dashboard.svg";
 import Student_Icon from "../../assets/icons/student.svg";
 import Teacher_Icon from "../../assets/icons/teacher.svg";
@@ -9,7 +11,7 @@ import Statistics_Icon from "../../assets/icons/stats.svg";
 import ImageFrame from "../sub_components/ImageFrame/ImageFrame";
 import Dashboard from "../Dashboard/Dashboard";
 
-const Menu = () => {
+const Menu = ({ changeAuth }) => {
   return (
     <div className="menu">
       <h1 className="title">Xamify</h1>
@@ -20,15 +22,21 @@ const Menu = () => {
       <div className="menu-2">
         <div>
           <img src={Dashboard_Icon} alt="" />
-          <h2>Dashboard</h2>
-        </div>
-        <div>
-          <img src={Assessment_Icon} alt="" />
-          <h2>Assessment</h2>
+          <Link
+            to="/dashboard"
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <h2 className="dshbrd">Dashboard</h2>
+          </Link>
         </div>
         <div>
           <img src={Student_Icon} alt="" />
-          <h2>Students</h2>
+          <Link
+            to="/studentpage"
+            style={{ textDecoration: "none", color: "black" }}
+          >
+            <h2 className="studPage">Students</h2>
+          </Link>
         </div>
         <div>
           <img src={Teacher_Icon} alt="" />
@@ -38,12 +46,11 @@ const Menu = () => {
           <img src={Course_Icon} alt="" />
           <h2>Course</h2>
         </div>
-        <div>
-          <img src={Statistics_Icon} alt="" />
-          <h2>Year</h2>
-        </div>
       </div>
-      <h1 className="SignOut">Sign out</h1>
+      <h1 className="SignOut" onClick={()=>{
+        Cookie.set('teacher', undefined);
+        changeAuth({status: false});
+      }}>Sign out</h1>
     </div>
   );
 };
