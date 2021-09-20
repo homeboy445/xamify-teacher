@@ -104,8 +104,17 @@
     margin-top: 4%;
     display: grid;
     grid-template-columns: 4fr 4fr;
+    width: 100%;
 }
 .st_2_2 > div{
     margin: 2%;
 }
+.st-nfnd{
+  transform: translate(40%, 0%);
+  width: 100%;
+  text-align: center;
+  font-size: 3rem;
+  font-weight: 500;
+}
+
 

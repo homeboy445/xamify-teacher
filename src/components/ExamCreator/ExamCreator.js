@@ -73,7 +73,6 @@ const ExamCreator = () => {
                 return ToggleDelQBx({ is: false, index: -1 });
               }
               q1.splice(index, 1);
-              console.log(q1);
               set_questions(q1);
               return ToggleDelQBx({ is: false, index: -1 });
             }}

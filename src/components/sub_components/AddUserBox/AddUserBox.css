@@ -187,11 +187,11 @@
 .bulk_stud_btns > label:-webkit-details-marker {
   display: none;
 }
-.bulk_stud_btns > a{
-    width: 50%;
-    margin-right: 4%;
+.bulk_stud_btns > a {
+  width: 50%;
+  margin-right: 4%;
 }
-.dwnload_csv{
+.dwnload_csv {
   width: 100%;
   margin-right: 5%;
   appearance: none;
@@ -257,6 +257,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 }
 .info_bx_1 > div:nth-child(1) {
   margin-right: -16%;
@@ -292,7 +293,7 @@
   border-bottom: 2px solid cyan;
 }
 .info_eml > div {
-  width: 760px;
+  width: 100%;
 }
 .info_eml > div {
   border: 2px solid white;
@@ -312,7 +313,24 @@
   width: 100%;
 }
 .usr_drp_down > select:nth-child(1) {
+  margin-top: 2%;
   margin-bottom: 2%;
+}
+.usr_drp_down > select:nth-child(2){
+  margin-top: 2%;
+  margin-bottom: 2%;
+}
+.usr_drp_down > div {
+  margin-top: 3%;
+  border: 2px solid white;
+}
+.usr_drp_down > div > input[type="text"] {
+  border-bottom: 2px solid white;
+  color: white;
+}
+.usr_drp_down > input[type="date"]{
+  margin-top: 2%;
+  transform: scale(1.4);
 }
 .inf_btns {
   display: flex;

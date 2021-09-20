@@ -10,6 +10,7 @@
   text-align: center;
   font-size: 3rem;
   font-weight: 600;
+  color: #224C67;
 }
 .exD_1 {
   display: flex;
@@ -70,6 +71,46 @@
   margin-bottom: 1%;
 }
 .exD_tl_2 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin-bottom: 2%;
+  font-family: 'Montserrat', sans-serif;
+}
+.pub_dtls_1 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: space-between;
+  margin-left: 4%;
+  margin-bottom: 2%;
+}
+.pub_dtls_1 > input[type="date"]{
+  align-self: center;
+  margin-right: 75%;
+  margin-top: 2%;
+  transform: scale(2);
+}
+.pub_tl_1 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin-bottom: 2%;
+  font-family: 'Montserrat', sans-serif;
+}
+.pub_dtls_2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-self: space-between;
+  margin-left: 4%;
+  margin-bottom: 1%;
+}
+.pub_dtls_2 > input[type="time"]{
+  align-self: center;
+  transform: scale(2);
+  margin-right: 82%;
+  margin-top: 2%;
+}
+.pub_tl_2 {
   font-size: 1.8rem;
   font-weight: 400;
   margin-bottom: 2%;

@@ -1,8 +1,9 @@
 import React from "react";
 import "./InputBox.css";
-import user from '../../../assets/icons/user.svg';
-import email from '../../../assets/icons/email.svg';
+import user from "../../../assets/icons/user.svg";
+import email from "../../../assets/icons/email.svg";
 import password from "../../../assets/icons/password.svg";
+import rollno from "../../../assets/icons/rollno.svg";
 
 const InputBox = ({ placeholder, type, onChangeCallback, value }) => {
   return (
@@ -19,7 +20,9 @@ const InputBox = ({ placeholder, type, onChangeCallback, value }) => {
           type === "email"
             ? email
             : type === "text"
-            ? user
+            ? placeholder === "Roll Number"
+              ? rollno
+              : user
             : password
         }
         alt={type}

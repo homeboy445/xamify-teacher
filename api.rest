@@ -2,8 +2,8 @@
 @prodUrl = https://xamify.herokuapp.com/api
 
 @baseUrl = {{prodUrl}}
-@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQHhhbWlmeS5jb20iLCJ0eXBlIjoiVEVBQ0hFUiIsImlhdCI6MTYzMjA1NjQ0NywiZXhwIjoxNjMyMDU3MzQ3fQ.6zAnDjJZkegzQiSZdYsMo4I_f80UeCeiME7B76RUjpU
-@refresh = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQHhhbWlmeS5jb20iLCJ0eXBlIjoiVEVBQ0hFUiIsImlhdCI6MTYzMjA0MjgxOSwiZXhwIjoxNjMyNjQ3NjE5fQ.qXKu-5KV9RevRmsWknPynyPzPZlSbRP4jkcvTvBW6LI
+@token = Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQHhhbWlmeS5jb20iLCJ0eXBlIjoiVEVBQ0hFUiIsImlhdCI6MTYzMjE3Mjc3NiwiZXhwIjoxNjMyMTczNjc2fQ.16L8b5i4IqkIX0S6GPUOgVLJB2sF-4uaWdIjGYqg5-k
+@refresh = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWluQHhhbWlmeS5jb20iLCJ0eXBlIjoiVEVBQ0hFUiIsImlhdCI6MTYzMjE0NTI1MSwiZXhwIjoxNjMyNzUwMDUxfQ.52bXR1cKstOmmNamTuFE-udf9YeTJqv8cfifqZ71E7w
 
 
 ###
@@ -89,7 +89,7 @@ Authorization: {{token}}
 
 ###
 // GET SINGLE COUTSE
-@courseid = 782e3afc-5b47-412c-a8f1-e79f226288b6
+@courseid = 115ef359-09c6-4da4-abda-cc92fe448156
 GET {{baseUrl}}/courses/{{courseid}}
 Authorization: {{token}}
 
@@ -130,7 +130,7 @@ Authorization: {{token}}
 
 ###
 // GET SINGLE YEAR
-@yearid = ef0cc9eb-6faf-419d-8438-f1a62748da76
+@yearid = a06ec8a0-8d72-43d7-a6f5-e9625983ce7c
 GET {{baseUrl}}/years/{{yearid}}
 Authorization: {{token}}
 
@@ -342,3 +342,69 @@ Authorization:  {{token}}
         }
     ]
 }
+
+###
+
+// ASSESSMENTS /api/assesments
+
+
+// GET ALL ASSESSMENTS
+GET {{baseUrl}}/assessments
+Authorization: {{token}}
+
+###
+// GET SINGLE ASSESSMENTS
+@assessmentid = 65ce13f5-c977-45b8-8c16-637df3967c95
+GET {{baseUrl}}/assessments/{{assessmentid}}
+Authorization: {{token}}
+
+###
+// CREATE NEW ASSESSMENTS
+
+POST {{baseUrl}}/assessments
+Content-Type: application/json
+Authorization:  {{token}}
+
+{
+    "type": "DIGITAL",
+    "subjectId": "{{subjectid}}",
+    "startTime": "2021-09-19T17:19:41.376Z",
+    "endTime": "2021-09-19T23:19:41.376Z"
+}
+
+###
+// EDIT ASSESSMENTS
+POST {{baseUrl}}/assessments/{{assessmentid}}
+Content-Type: application/json
+Authorization:  {{token}}
+
+{
+    "questions": [
+        {
+            "type":"MCQ",
+            "text":"This is a MCQ Question",
+            "choices":[
+                {"text":"Option 1"},
+                {"text":"Option 2"},
+                {"text":"Option 3"},
+                {"text":"Option 4"}
+            ]
+        },
+        {
+            "type":"TYPE",
+            "text":"This is a TYPE Question"
+        },
+        {
+            "type":"IMAGE",
+            "text":"This is a IMAGE Question"
+        }
+    ]
+}
+
+###
+// DELETE ASSESSMENTS
+DELETE  {{baseUrl}}/assessments/{{assessmentid}}
+Content-Type: application/json
+Authorization:  {{token}}
+
+###

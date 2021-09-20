@@ -59,7 +59,6 @@
   font-weight: 300;
   cursor: pointer;
   text-decoration: underline;
-  text-shadow: 0.1px 0.1px 0.1px yellow;
 }
 .crd_1 > h3:nth-child(1) {
   margin-right: 8%;
@@ -68,4 +67,32 @@
 .crd_1 > h3:nth-child(2){
     color: #ff3800;
 }
+.crd_subjects{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  width: 100%;
+}
+.crd_sub_1{
+  overflow-y: scroll;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 2%;
+}
+.crd_sub_1 > ul {
+  display: flex;
+}
+.crd_sub_1 > ul > li{
+  list-style: none;
+  background: whitesmoke;
+  margin-left: 1%;
+  margin-right: 1%;
+  color: black;
+  border-radius: 4px;
+  cursor:pointer;
+  padding: 2%;
+}
+
 

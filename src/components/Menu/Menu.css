@@ -70,6 +70,28 @@
 .studPage:hover {
   color: blue;
 }
+.teachPage {
+  margin-bottom: 12%;
+  font-weight: lighter;
+  transition: 0.9s;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+}
+.teachPage:hover {
+  color: blue;
+}
+.coursePage {
+  margin-bottom: 12%;
+  font-weight: lighter;
+  transition: 0.9s;
+  cursor: pointer;
+  color: black;
+  text-decoration: none;
+}
+.coursePage:hover {
+  color: blue;
+}
 .menu-2 > div > img {
   width: 55%;
   margin-top:15%;

@@ -1,18 +1,98 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./AddUserBox.css";
+import axios from "axios";
 import csvToJson from "csvtojson";
 import InputBox from "../InputBox/InputBox";
 import Dropdown from "../Dropdown/Dropdown";
 import CSV from "../../../assets/template.csv";
+import AuthContext from "./../../../Context";
 
-const AddUserBox = ({ DetailBox, title, type, closeBox }) => {
+const AddUserBox = ({ DetailBox, title, type, closeBox, onSubmitCallback }) => {
+  const Main = useContext(AuthContext);
   const [firstName, set_fName] = useState("");
   const [secondName, set_SName] = useState("");
   const [email, set_Email] = useState("");
   const [course, set_Course] = useState("Choose course");
+  const [courseList, update_clist] = useState([
+    "Comp.Sci.",
+    "Math",
+    "Physics",
+    "Chemistry",
+  ]);
+  const [yearList, update_ylist] = useState([
+    "1st year",
+    "2nd year",
+    "3rd year",
+    "4th year",
+  ]);
   const [year, set_Year] = useState("Choose year");
+  const [rollNo, set_RollN] = useState("");
+  const [dob, set_dob] = useState("1995-01-01");
   const [curCSV, changeCurCsv] = useState(null);
   const [ActiveType, change_AType] = useState(1);
+
+  const dataToList = (type) => {
+    let arr = [];
+    if (type === 1){
+      courseList.map(item=>{
+        arr.push(item.name);
+        return null;
+      });
+    }else{
+      yearList.map(item=>{
+        arr.push(item.label);
+        return null;
+      })
+    }
+    return arr;
+  }
+
+  const getSelectedId = (type) =>{
+    let id = '';
+    if (type === 0){
+      courseList.map(item=>{
+        if (item.name === course){
+          id = item.id;
+        }return null;
+      });
+    }else{
+      yearList.map(item=>{
+        if (item.name === year){
+          id = item.id;
+        }return null;
+      })
+    }return id;
+  }
+
+  const getDob = () =>{
+    var dateObj = new Date();
+    const d_Obj = dob.split('-');
+    dateObj.setFullYear(parseInt(d_Obj[0]),parseInt(d_Obj[1]),parseInt(d_Obj[2]));
+    dateObj.setHours(0);
+    dateObj.setMinutes(0);
+    dateObj.setSeconds(0);
+    return dateObj.toISOString();
+  }
+
+  useEffect(() => {
+    axios
+      .get(Main.url + "/courses", {
+        headers: { Authorization: Main.AccessToken },
+      })
+      .then((response) => {
+        update_clist(response.data);
+        axios
+          .get(Main.url + "/years", {
+            headers: { Authorization: Main.AccessToken },
+          })
+          .then((response) => {
+            update_ylist(response.data);
+          });
+      })
+      .catch((err) => {
+        Main.RefreshAccessToken();
+      });
+  }, [Main]);
 
   return (
     <div
@@ -23,11 +103,18 @@ const AddUserBox = ({ DetailBox, title, type, closeBox }) => {
       }}
     >
       <div className="s_box_btns">
-        <button onClick={() => {
-          change_AType((ActiveType + 1)%2);
-        }}> {ActiveType === 0 ? "Indivisual" : "Multiple"} </button>
+        {type !== "teacher" ? (
+          <button
+            onClick={() => {
+              change_AType((ActiveType + 1) % 2);
+            }}
+          >
+            {" "}
+            {ActiveType === 0 ? "Multiple" : "Indivisual"}{" "}
+          </button>
+        ) : null}
       </div>
-      {ActiveType === 0 ? (
+      {ActiveType === 0 || type === "teacher" ? (
         <div className="db-info-bx">
           <h1 className="info_title">{title}</h1>
           {type === "student" ? (
@@ -69,17 +156,35 @@ const AddUserBox = ({ DetailBox, title, type, closeBox }) => {
           {type === "student" ? (
             <div className="usr_drp_down">
               <Dropdown
-                list={["Comp.Sci.", "Math", "Physics", "Chemistry"]}
+                list={dataToList(1)}
                 value={course}
                 onChangeCallback={(e) => {
                   set_Course(e.target.value);
                 }}
               />
               <Dropdown
-                list={["1st year", "2nd year", "3rd year", "4th year"]}
+                list={dataToList(2)}
                 value={year}
                 onChangeCallback={(e) => {
                   set_Year(e.target.value);
+                }}
+              />
+              <InputBox
+                className="dd"
+                type="text"
+                placeholder="Roll Number"
+                onChangeCallback={(e) => {
+                  set_RollN(e.target.value.trim());
+                }}
+                value={rollNo}
+              />
+              <input
+                type="date"
+                min="1980-01-01"
+                max="2005-12-12"
+                value={dob}
+                onChange={(e) => {
+                  set_dob(e.target.value);
                 }}
               />
             </div>
@@ -117,13 +222,15 @@ const AddUserBox = ({ DetailBox, title, type, closeBox }) => {
                 changeCurCsv(e.target.files[0]);
                 console.log(e.target.files[0]);
                 const reader = new FileReader();
-                reader.onload=(e)=>{
+                reader.onload = (e) => {
                   let c = e.target.result;
-                  console.log(c.split('\n'), ' ', typeof c);
-                  csvToJson().fromString(c).then(response=>{
-                    console.log(response); //CSV data
-                  });
-                }
+                  console.log(c.split("\n"), " ", typeof c);
+                  csvToJson()
+                    .fromString(c)
+                    .then((response) => {
+                      console.log(response); //CSV data
+                    });
+                };
                 reader.readAsBinaryString(e.target.files[0]);
               }}
             />
@@ -131,7 +238,28 @@ const AddUserBox = ({ DetailBox, title, type, closeBox }) => {
         </div>
       )}
       <div className="inf_btns">
-        <button className="add_usr_btn">Add {type}{ActiveType===1?"s":null}</button>
+        <button
+          className="add_usr_btn"
+          onClick={() => {
+            if (type === "teacher") {
+              onSubmitCallback(email, `${email}@1234`);
+            } else {
+              let studObj = {
+                name: firstName + secondName,
+                email: email,
+                password: email + "&&1223",
+                rollNo: rollNo,
+                dob: getDob(),
+                yearId: getSelectedId(0),
+                courseId:getSelectedId(1)
+              };
+              onSubmitCallback(studObj);
+            }
+          }}
+        >
+          Add {type}
+          {ActiveType === 1 ? "s" : null}
+        </button>
         <button onClick={closeBox}>Cancel</button>
       </div>
     </div>

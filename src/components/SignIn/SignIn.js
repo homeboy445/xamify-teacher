@@ -4,27 +4,9 @@ import axios from "axios";
 import Cookie from "js-cookie";
 import InputBox from "../sub_components/InputBox/InputBox";
 
-const SignIn = ({ changeAuth }) => {
+const SignIn = ({ HandleAuth }) => {
   const [email, set_email] = useState("");
   const [password, set_password] = useState("");
-
-  const RefreshAccessToken = (token) => {
-    setTimeout(() => {
-      axios
-        .post("https://xamify.herokuapp.com/api/auth/token", {
-          token: token,
-        })
-        .then((response) => {
-          let cookieValue = Cookie.get("teacher");
-          cookieValue = cookieValue === "undefined" ? undefined : cookieValue;
-          if (cookieValue === undefined) {
-            return;
-          }
-          Cookie.set('teacher', response.data.accessToken);
-          RefreshAccessToken(response.data.refreshToken);
-        });
-    }, 12 * 60 * 1000); //Refresh after every 12 minutes.
-  };
 
   const HandleSubmit = (e) => {
     e.preventDefault();
@@ -34,9 +16,7 @@ const SignIn = ({ changeAuth }) => {
         password: password,
       })
       .then((response) => {
-        Cookie.set("teacher", response.data.accessToken);
-        changeAuth({ status: true });
-        RefreshAccessToken(response.data.refreshToken);
+        HandleAuth(response.data.accessToken);
       })
       .catch((err) => {
         return;

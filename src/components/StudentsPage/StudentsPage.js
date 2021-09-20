@@ -1,52 +1,43 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import "./StudentsPage.css";
+import axios from "axios";
 import Card from "../sub_components/Card/Card";
+import AuthContext from "../../Context";
 import AddUserBox from "../sub_components/AddUserBox/AddUserBox";
 
 const StudentsPage = () => {
+  const Main = useContext(AuthContext);
   const [DetailBox, toggle_DBx] = useState(false);
-  const [students, set_students] = useState([
-    {
-      Name: "Will Smith",
-      course: "Computer Science",
-      year: "2nd year",
-    },
-    {
-      Name: "Ray palmer",
-      course: "Mathematics",
-      year: "3rd year",
-    },
-    {
-      Name: "Tony Stark",
-      course: "Physics",
-      year: "4th year",
-    },
-    {
-      Name: "Bruce Banner",
-      course: "Physics",
-      year: "1st year",
-    },
-    {
-      Name: "Damian Wayne",
-      course: "Applied Sciences",
-      year: "1st year",
-    },
-  ]);
+  const [students, set_students] = useState([]);
   const [displayList, update_List] = useState(students);
   const [searchQuery, update_Query] = useState("");
+  const [fetchStatus, update_Status] = useState(false);
 
   useEffect(() => {
+    if (Main.AccessToken !== null && !fetchStatus) {
+      axios
+        .get(Main.url + "/students", {
+          headers: { Authorization: Main.AccessToken },
+        })
+        .then((response) => {
+          set_students(response.data);
+          update_Status(true);
+        })
+        .catch((err) => {
+          Main.RefreshAccessToken();
+        });
+    }
     let obj = [];
     if (!searchQuery) {
       return update_List(students);
     }
-    for (const key of displayList) {
-      if (key.Name.includes(searchQuery)) {
+    for (const key of students) {
+      if (key.name.includes(searchQuery)) {
         obj.push(key);
       }
     }
     update_List(obj);
-  }, [searchQuery]);
+  }, [students, searchQuery]);
 
   return (
     <div className="stud-page">
@@ -54,8 +45,30 @@ const StudentsPage = () => {
         DetailBox={DetailBox}
         title={"Add a new Student"}
         type="student"
-        closeBox={()=>{
-            toggle_DBx(false);
+        closeBox={() => {
+          toggle_DBx(false);
+        }}
+        onSubmitCallback={(student) => {
+          axios
+            .post(
+              Main.url + "/students",
+              {
+                'email': student.email,
+                'name': student.name,
+                'rollNo': student.rollNo,
+                'dob': student.dob,
+                'yearId': student.yearId,
+                'courseId': student.courseId,
+              },
+              {
+                headers: { Authorization: Main.AccessToken },
+                "content-type": "application/json",
+              }
+            )
+            .then((response) => {
+              console.log(response.data);
+              toggle_DBx(false);
+            });
         }}
       />
       <div
@@ -98,8 +111,9 @@ const StudentsPage = () => {
                 <Card
                   key={index}
                   image={`https://avatars.dicebear.com/api/human/${index}.svg`}
-                  Name={item.Name}
-                  Creds={[item.course, item.year]}
+                  Name={item.name}
+                  Creds={[item.profile.course.name, item.profile.year.label]}
+                  Subjects={[]}
                 />
               );
             })
