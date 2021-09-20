@@ -13,6 +13,7 @@ const AddUserBox = ({ DetailBox, title, type, closeBox, onSubmitCallback }) => {
   const [secondName, set_SName] = useState("");
   const [email, set_Email] = useState("");
   const [course, set_Course] = useState("Choose course");
+  const [csvData, set_csvData] = useState([]);
   const [courseList, update_clist] = useState([
     "Comp.Sci.",
     "Math",
@@ -33,46 +34,61 @@ const AddUserBox = ({ DetailBox, title, type, closeBox, onSubmitCallback }) => {
 
   const dataToList = (type) => {
     let arr = [];
-    if (type === 1){
-      courseList.map(item=>{
+    if (type === 1) {
+      courseList.map((item) => {
         arr.push(item.name);
         return null;
       });
-    }else{
-      yearList.map(item=>{
+    } else {
+      yearList.map((item) => {
         arr.push(item.label);
         return null;
-      })
+      });
     }
     return arr;
-  }
+  };
 
-  const getSelectedId = (type) =>{
+  const getCourseId = (course) => {
+    let id = "";
+    courseList.map((item) => {
+      if (item.name === course) {
+        id = item.id;
+      }
+      return null;
+    });
+    return id;
+  };
+
+  const getYearId = (year) =>{
     let id = '';
-    if (type === 0){
-      courseList.map(item=>{
-        if (item.name === course){
-          id = item.id;
-        }return null;
-      });
-    }else{
-      yearList.map(item=>{
-        if (item.name === year){
-          id = item.id;
-        }return null;
-      })
-    }return id;
+    yearList.map((item) => {
+      if (item.name === year) {
+        id = item.id;
+      }
+      return null;
+    });
+    return id;
   }
 
-  const getDob = () =>{
+  const getDob = (date, delimiter = '-') => {
     var dateObj = new Date();
-    const d_Obj = dob.split('-');
-    dateObj.setFullYear(parseInt(d_Obj[0]),parseInt(d_Obj[1]),parseInt(d_Obj[2]));
+    let d_Obj = date.split(delimiter);
+    if (delimiter === '/'){
+      let t = d_Obj[2];
+      d_Obj[2] = d_Obj[0];
+      d_Obj[0] = t;
+    }
+    console.log(date, ' ', d_Obj);
+    dateObj.setFullYear(
+      parseInt(d_Obj[0]),
+      parseInt(d_Obj[1]),
+      parseInt(d_Obj[2])
+    );
     dateObj.setHours(0);
     dateObj.setMinutes(0);
     dateObj.setSeconds(0);
     return dateObj.toISOString();
-  }
+  };
 
   useEffect(() => {
     axios
@@ -192,49 +208,67 @@ const AddUserBox = ({ DetailBox, title, type, closeBox, onSubmitCallback }) => {
         </div>
       ) : (
         <div className="bulk_stud">
-          <div className="usr_drp_down">
-            <Dropdown
-              list={["Comp.Sci.", "Math", "Physics", "Chemistry"]}
-              value={course}
-              onChangeCallback={(e) => {
-                set_Course(e.target.value);
-              }}
-            />
-            <Dropdown
-              list={["1st year", "2nd year", "3rd year", "4th year"]}
-              value={year}
-              onChangeCallback={(e) => {
-                set_Year(e.target.value);
-              }}
-            />
-          </div>
-          <div className="bulk_stud_btns">
-            <a href={CSV} download="template.csv">
-              <button className="dwnload_csv">Download Template</button>
-            </a>
-            <label htmlFor="uploadCSV">Upload CSV</label>
-            <input
-              type="file"
-              id="uploadCSV"
-              accept=".csv"
-              style={{ visibility: "hidden", pointerEvents: "none" }}
-              onChange={(e) => {
-                changeCurCsv(e.target.files[0]);
-                console.log(e.target.files[0]);
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                  let c = e.target.result;
-                  console.log(c.split("\n"), " ", typeof c);
-                  csvToJson()
-                    .fromString(c)
-                    .then((response) => {
-                      console.log(response); //CSV data
-                    });
-                };
-                reader.readAsBinaryString(e.target.files[0]);
-              }}
-            />
-          </div>
+          {ActiveType === 0 ? (
+            <div className="usr_drp_down">
+              <Dropdown
+                list={["Comp.Sci.", "Math", "Physics", "Chemistry"]}
+                value={course}
+                onChangeCallback={(e) => {
+                  set_Course(e.target.value);
+                }}
+              />
+              <Dropdown
+                list={["1st year", "2nd year", "3rd year", "4th year"]}
+                value={year}
+                onChangeCallback={(e) => {
+                  set_Year(e.target.value);
+                }}
+              />
+            </div>
+          ) : (
+            <div className="bulk_stud_btns">
+              <a href={CSV} download="template.csv">
+                <button className="dwnload_csv">Download Template</button>
+              </a>
+              <label htmlFor="uploadCSV">Upload CSV</label>
+              <input
+                type="file"
+                id="uploadCSV"
+                accept=".csv"
+                style={{ visibility: "hidden", pointerEvents: "none" }}
+                onChange={(e) => {
+                  changeCurCsv(e.target.files[0]);
+                  const reader = new FileReader();
+                  reader.onload = (e) => {
+                    let c = e.target.result;
+                    csvToJson()
+                      .fromString(c)
+                      .then((response) => {
+                        let student = [];
+                        response.map((item) => {
+                          console.log(item);
+                          student.push([
+                            {
+                              name: item.FirstName + item.SecondName,
+                              email: item.email,
+                              password: item.email + "&&1223",
+                              rollNo: item.rollNo,
+                              dob: getDob(item.dob, '/'),
+                              yearId: getYearId(item.year),
+                              courseId: getCourseId(item.course),
+                            },
+                          ]);
+                          return null;
+                        });
+                        console.log(student);
+                        changeCurCsv(student);
+                      });
+                  };
+                  reader.readAsBinaryString(e.target.files[0]);
+                }}
+              />
+            </div>
+          )}
         </div>
       )}
       <div className="inf_btns">
@@ -250,10 +284,14 @@ const AddUserBox = ({ DetailBox, title, type, closeBox, onSubmitCallback }) => {
                 password: email + "&&1223",
                 rollNo: rollNo,
                 dob: getDob(),
-                yearId: getSelectedId(0),
-                courseId:getSelectedId(1)
+                yearId: getYearId(year),
+                courseId: getCourseId(course),
               };
-              onSubmitCallback(studObj);
+              if (ActiveType === 0){
+                onSubmitCallback(studObj);
+              }else{
+                onSubmitCallback(csvData);
+              }
             }
           }}
         >

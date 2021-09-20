@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect, useContext } from "react";
 import "./Menu.css";
 import { Link } from "react-router-dom";
+import AuthContext from "../../Context";
 import Cookie from "js-cookie";
 import Dashboard_Icon from "../../assets/icons/dashboard.svg";
 import Student_Icon from "../../assets/icons/student.svg";
@@ -9,12 +10,18 @@ import Course_Icon from "../../assets/icons/course.svg";
 import ImageFrame from "../sub_components/ImageFrame/ImageFrame";
 
 const Menu = ({ changeAuth }) => {
+  const Main = useContext(AuthContext);
+
+  useEffect(() => null, [Main]);
+
   return (
     <div className="menu">
       <h1 className="title">Xamify</h1>
       <div className="menu-1">
         <ImageFrame image={Dashboard_Icon} />
-        <h2>FirstName</h2>
+        <h2>
+          {Main.userInfo.name || "Admin User"}
+        </h2>
       </div>
       <div className="menu-2">
         <div>
@@ -59,7 +66,7 @@ const Menu = ({ changeAuth }) => {
         onClick={() => {
           Cookie.set("teacher", undefined);
           changeAuth(false);
-          window.location.href='/';
+          window.location.href = "/";
         }}
       >
         Sign out

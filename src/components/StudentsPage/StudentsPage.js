@@ -49,8 +49,10 @@ const StudentsPage = () => {
           toggle_DBx(false);
         }}
         onSubmitCallback={(student) => {
+          console.log(student);
+          return;
           axios
-            .post(
+            .post( //it's working... !@@
               Main.url + "/students",
               {
                 'email': student.email,

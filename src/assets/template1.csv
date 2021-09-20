@@ -1,1 +1,3 @@
-rollNo,Firstname,SecondName,email,course,year,dob(yyyy-mm-dd)
+rollNo,FirstName,SecondName,email,course,year,dob
+4450,Will,Smith,WSmith3@xyz.com,computer scienc,1st,5/1/2003
+4461,Howard,Johnson,SJohn2@xyz.com,physics,2nd,11/5/2002
