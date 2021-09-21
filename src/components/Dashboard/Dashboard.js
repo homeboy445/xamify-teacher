@@ -10,6 +10,7 @@ const Dashboard = () => {
   const [Show_Active, set_SActive] = useState(true);
   const [Show_Upcoming, set_SUpcoming] = useState(true);
   const [Show_Attempted, set_SAttempted] = useState(true);
+  const [shownErrorMessage, set_EMessage] = useState(false);
 
   const [ActiveTests, set_ActiveTests] = useState([]);
   const [UpcomingTests, set_UpcomingTests] = useState([]);
@@ -22,6 +23,7 @@ const Dashboard = () => {
           headers: { Authorization: Main.AccessToken },
         })
         .then((response) => {
+          set_EMessage(false);
           let At = ActiveTests,
             Up = UpcomingTests,
             Atm = AttemptedTests,
@@ -57,10 +59,13 @@ const Dashboard = () => {
           set_UpcomingTests(Up);
           set_AttemptedTests(Atm);
           update_Details(obj);
-          console.log(obj);
         })
         .catch((err) => {
           Main.RefreshAccessToken();
+          if (shownErrorMessage){
+            return;
+          }
+          set_EMessage(true);
           Main.toggleErrorBox({
             //Might be responsible for a possible loop. !loop
             is: true,

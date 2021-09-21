@@ -27,7 +27,7 @@ const App = () => {
   const RefreshAccessToken = () => {
     let d = new Date();
     let diff = d - refreshTokenManager;
-    if (Math.floor(diff / 60e3) < 10){
+    if (Math.floor(diff / 60e3) < 10) {
       return;
     }
     axios
