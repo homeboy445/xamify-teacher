@@ -17,21 +17,29 @@ const App = () => {
   const [AccessToken, update_Token] = useState(null);
   const [userInfo, update_Info] = useState({});
   const [ActiveRoute, update_ActiveRoute] = useState("Home");
-  const [isError, toggleErrorStatus] = useState({is: true, info: "Testing..."});
+  const [refreshTokenManager, update_Manager] = useState(new Date());
+  const [isError, toggleErrorStatus] = useState({
+    is: false,
+    info: "Testing...",
+  });
   const url = "https://xamify.herokuapp.com/api";
 
   const RefreshAccessToken = () => {
-    axios //This is not working... !@@
+    let d = new Date();
+    let diff = d - refreshTokenManager;
+    if (Math.floor(diff / 60e3) < 10){
+      return;
+    }
+    axios
       .post(url + "/auth/token", {
         token: Cookie.get("refresh"),
       })
       .then((response) => {
-        if (!Auth){
+        if (!Auth) {
           return;
         }
         Cookie.set("teacher", response.data.accessToken);
         Cookie.set("refresh", response.data.refreshToken);
-        setTimeout(() => RefreshAccessToken(), 10 * 60 * 1000);
       });
   };
 
@@ -39,6 +47,7 @@ const App = () => {
     let cookieValue = Cookie.get("teacher");
     if (isCookieAlive()) {
       update_Token(`Bearer ${cookieValue}`);
+      update_Manager(new Date());
       if (!Auth) {
         changeAuth(true);
       }
@@ -50,7 +59,6 @@ const App = () => {
           update_Info(response.data);
         })
         .catch((err) => {
-          console.log(err);
           RefreshAccessToken();
         });
     } else {
@@ -70,9 +78,16 @@ const App = () => {
         url,
         RefreshAccessToken,
         ActiveRoute,
-        updateActiveRoute:(val) =>  update_ActiveRoute(val),
+        updateActiveRoute: (val) => update_ActiveRoute(val),
         isError,
-        toggleErrorBox: (val) => toggleErrorStatus(val),
+        toggleErrorBox: (val) => {
+          toggleErrorStatus(val);
+          if (val.is) {
+            setTimeout(() => {
+              toggleErrorStatus(false);
+            }, 10000);
+          }
+        },
       }}
     >
       <Router>

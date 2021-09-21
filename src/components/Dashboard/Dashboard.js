@@ -1,41 +1,82 @@
-import React, { useState } from "react";
-import Arrow_Down from "../../assets/Images/arrow-down(white).png";
+import React, { useState, useEffect, useContext } from "react";
 import "./Dashboard.css";
+import AuthContext from "../../Context";
+import axios from "axios";
+import Arrow_Down from "../../assets/Images/arrow-down(white).png";
 
 const Dashboard = () => {
+  const Main = useContext(AuthContext);
+  const [AssessmentDetails, update_Details] = useState([]);
   const [Show_Active, set_SActive] = useState(true);
   const [Show_Upcoming, set_SUpcoming] = useState(true);
   const [Show_Attempted, set_SAttempted] = useState(true);
 
-  const [ActiveTests, set_ActiveTests] = useState([
-    {
-      ExamName: "Algorithm Design",
-    },
-    {
-      ExamName: "Mathematics",
-    },
-    {
-      ExamName: "Physics",
-    },
-  ]);
-  const [UpcomingTests, set_UpcomingTests] = useState([
-    {
-      ExamName: "Data Structures",
-    },
-  ]);
-  const [AttemptedTests, set_AttemptedTests] = useState([
-    {
-      ExamName: "Discrete Mathematics",
-    },
-  ]);
+  const [ActiveTests, set_ActiveTests] = useState([]);
+  const [UpcomingTests, set_UpcomingTests] = useState([]);
+  const [AttemptedTests, set_AttemptedTests] = useState([]);
+
+  useEffect(() => {
+    if (Main.AccessToken !== null && !Main.isError.is) {
+      axios
+        .get(Main.url + "/assessments", {
+          headers: { Authorization: Main.AccessToken },
+        })
+        .then((response) => {
+          let At = ActiveTests,
+            Up = UpcomingTests,
+            Atm = AttemptedTests,
+            obj = [];
+          response.data.map((item) => {
+            if (item.author.email !== Main.userInfo.email) {
+              return null;
+            }
+            let d1 = new Date(item.startTime),
+              d2 = new Date(item.endTime);
+            let duration = Math.floor((d2 - d1) / 60e3);
+            let dN = new Date();
+            let diff = Math.floor((d1 - dN) / 60e3); //Subtracting start date with current date
+            if (diff > 0) {
+              //If the difference is +ve then put into upcoming catg
+              Up.push({ ExamName: item.subject.name });
+              obj.push({ upcoming: item });
+            } else {
+              //If not,
+              if (duration >= Math.abs(diff)) {
+                // Check if it's duration greater...
+                At.push({ ExamName: item.subject.name });
+                obj.push({ active: item });
+              } else {
+                //Else do this...
+                Atm.push({ ExamName: item.subject.name });
+                obj.push({ attempted: item });
+              }
+            }
+            return null;
+          });
+          set_ActiveTests(At);
+          set_UpcomingTests(Up);
+          set_AttemptedTests(Atm);
+          update_Details(obj);
+          console.log(obj);
+        })
+        .catch((err) => {
+          Main.RefreshAccessToken();
+          Main.toggleErrorBox({
+            //Might be responsible for a possible loop. !loop
+            is: true,
+            info: "Some error has occured while fetching assessments",
+          });
+        });
+    }
+  }, [Main]);
 
   return (
     <div className="dashboard">
       <div className="db-titl">
         <h1 className="d-title">Dashboard</h1>
-        <button onClick={
-          ()=>window.location.href="/examdetails"
-        }>Create Tests + </button>
+        <button onClick={() => (window.location.href = "/examdetails")}>
+          Create Tests +{" "}
+        </button>
       </div>
       <div className="dashboard-1">
         <div className="Active">

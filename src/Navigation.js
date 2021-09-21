@@ -100,7 +100,7 @@ const Navigation = () => {
           }}
         />
       </Switch>
-      {Main.isError.is ? <ErrorBox info={Main.isError.is} /> : null}
+      {Main.isError.is ? <ErrorBox info={Main.isError.info} /> : null}
     </div>
   );
 };
