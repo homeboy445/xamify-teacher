@@ -22,7 +22,6 @@ const sampleData = [
 const ExamCreator = (props) => {
   const Main = useContext(AuthContext);
   const [ExamDetails, update_Details] = useState([]);
-  const [fetchedQues, set_Fques] = useState([]); //Pre-existing questions... ideal for editing the test later.
   const [questions, set_questions] = useState([]);
   const [instructions, set_instructions] = useState("");
 
@@ -55,7 +54,7 @@ const ExamCreator = (props) => {
   };
 
   useEffect(() => {
-    if (Main.AccessToken !== null && fetchedQues.length === 0) {
+    if (Main.AccessToken !== null && questions.length === 0) {
       axios
         .get(Main.url + `/assessments/${ExamId}`, {
           headers: {
@@ -63,8 +62,14 @@ const ExamCreator = (props) => {
           },
         })
         .then((response) => {
-          set_Fques(response.data.questions);
-          set_questions(response.data.questions);
+          if (response.data.questions.length > 0) {
+            Main.toggleErrorBox({
+              is: true,
+              info: "Editing is not supported yet. Redirecting to dashboard...",
+            });
+            setTimeout(() => (window.location.href = "/dashboard"), 10000);
+            return;
+          }
           update_Details(response.data);
         })
         .catch((e) => {
@@ -79,7 +84,7 @@ const ExamCreator = (props) => {
         set_MxChoice(questions[idx].choices.length);
       }
     }
-  }, [questions, AddProblemBoxOpen, Main, fetchedQues]);
+  }, [questions, AddProblemBoxOpen, Main]);
 
   return (
     <div className="examCreator">
@@ -245,26 +250,23 @@ const ExamCreator = (props) => {
                 qObj.push({
                   text: ProblemStatement,
                   type: getMode(),
-                  choices: [],
                 });
               } else {
                 qObj[n - 1].text = ProblemStatement;
                 qObj[n - 1].type = getMode();
-                qObj[n - 1].choices = [];
               }
-              if (typeof qObj[n - 1]['choices'] === undefined){
-                qObj[n - 1]['choices'] = [];
-              }
-              if (choice1.trim() === "" && choice2.trim() === "") {
-                return;
-              }
-              qObj.choices = [{ text: choice1 }];
-              qObj.choices.push({ text: choice2 });
-              if (MaxChoice >= 3 && choice3.trim() !== "") {
-                qObj.choices.push({ text: choice3 });
-              }
-              if (MaxChoice === 4 && choice4.trim() !== "") {
-                qObj.choices.push({ text: choice4 });
+              if (TypeOfAnswering === 0) {
+                if (choice1.trim() === "" && choice2.trim() === "") {
+                  return;
+                }
+                qObj[n - 1].choices = [{ text: choice1 }];
+                qObj[n - 1].choices.push({ text: choice2 });
+                if (MaxChoice >= 3 && choice3.trim() !== "") {
+                  qObj[n - 1].choices.push({ text: choice3 });
+                }
+                if (MaxChoice === 4 && choice4.trim() !== "") {
+                  qObj[n - 1].choices.push({ text: choice4 });
+                }
               }
               set_questions(qObj);
               ToggleAddPrBox({ is: false, editor: -1 });
@@ -358,13 +360,6 @@ const ExamCreator = (props) => {
               className="pblsh"
               onClick={() => {
                 let qq = questions;
-                delete qq.choices;
-                qq.map((item, index)=>{
-                  if (item.id){
-                    qq.splice(index, 1);
-                  }return null;
-                });
-                console.log(qq);
                 axios
                   .post(
                     Main.url + `/assessments/${ExamId}`,

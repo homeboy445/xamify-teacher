@@ -91,9 +91,9 @@ font-family: 'Roboto', sans-serif;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 100%;
+  width: 30%;
   position: absolute;
-  right: -38%;
+  right: -1%;
   top: 28%;
 }
 .exmCr_btns {

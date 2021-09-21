@@ -75,18 +75,28 @@ const ExamDetails = () => {
       endTime: dObj1.toISOString(),
       subjectId: getSubId(subject),
     };
-    alert(
-      "Please recheck the credentials again, as they cannot be edited once the test is created"
-    );
-    axios.post(Main.url + "/assessments", ExamObject,{
-      headers: {
-        Authorization: Main.AccessToken,
-      },
-    }).then(response=>{
-      window.location.href=`/examcreator/${response.data.id}`;
-    }).catch(err=>{
-      Main.toggleErrorBox({is: true, info: 'There was an error, try again later.'});
-    })
+    if(
+      !window.confirm(
+        "Are you sure with these credentials as these cannot be edited again and would like to proceed further?"
+      )
+    ){
+      return;
+    }
+    axios
+      .post(Main.url + "/assessments", ExamObject, {
+        headers: {
+          Authorization: Main.AccessToken,
+        },
+      })
+      .then((response) => {
+        window.location.href = `/examcreator/${response.data.id}`;
+      })
+      .catch((err) => {
+        Main.toggleErrorBox({
+          is: true,
+          info: "There was an error, try again later.",
+        });
+      });
   };
 
   return (
