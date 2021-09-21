@@ -5,19 +5,31 @@ import axios from "axios";
 import Cookie from "js-cookie";
 import Navigation from "./Navigation";
 
+const isCookieAlive = () => {
+  return (
+    typeof Cookie.get("teacher") !== undefined &&
+    Cookie.get("teacher") !== "undefined"
+  );
+};
+
 const App = () => {
-  const [Auth, changeAuth] = useState(false);
+  const [Auth, changeAuth] = useState(isCookieAlive());
   const [AccessToken, update_Token] = useState(null);
   const [userInfo, update_Info] = useState({});
+  const [ActiveRoute, update_ActiveRoute] = useState("Home");
   const url = "https://xamify.herokuapp.com/api";
 
   const RefreshAccessToken = () => {
     return;
     console.log("Called");
     axios //This is not working... !@@
-      .post(url + "/auth/token", {}, {
-        token: Cookie.get("teacher")
-      })
+      .post(
+        url + "/auth/token",
+        {},
+        {
+          token: Cookie.get("teacher"),
+        }
+      )
       .then((response) => {
         Cookie.set("teacher", response.data.accessToken);
         console.log(response.data);
@@ -26,9 +38,9 @@ const App = () => {
 
   useEffect(() => {
     let cookieValue = Cookie.get("teacher");
-    if (cookieValue !== "undefined" && typeof cookieValue !== undefined) {
+    if (isCookieAlive()) {
       update_Token(`Bearer ${cookieValue}`);
-      if (!Auth.status) {
+      if (!Auth) {
         changeAuth(true);
       }
       axios
@@ -45,7 +57,7 @@ const App = () => {
           RefreshAccessToken();
         });
     } else {
-      if (Auth.status) {
+      if (Auth) {
         changeAuth(false);
       }
     }
@@ -60,6 +72,8 @@ const App = () => {
         userInfo,
         url,
         RefreshAccessToken,
+        ActiveRoute,
+        updateActiveRoute: update_ActiveRoute,
       }}
     >
       <Router>

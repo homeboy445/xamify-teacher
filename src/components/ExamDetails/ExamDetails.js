@@ -1,8 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import AuthContext from "../../Context";
 import "./ExamDetails.css";
 import Dropdown from "../sub_components/Dropdown/Dropdown";
+import Arrow from "../../assets/Images/right-arrow.png";
 
 const ExamDetails = () => {
+  const Main = useContext(AuthContext);
   const [subject, set_Subject] = useState("Choose subject");
   const [duration, set_duration] = useState([]);
   const [hours, set_hours] = useState(1);
@@ -51,7 +54,7 @@ const ExamDetails = () => {
       k.push(i);
     }
     set_duration(k);
-  }, []);
+  }, [Main]);
 
   const HandleSubmit = () => {
     const ExamObject = {
@@ -68,7 +71,10 @@ const ExamDetails = () => {
 
   return (
     <div className="examDetails">
-      <h1 className="exMD_title"> Exam Details </h1>{" "}
+      <div className="exMD_title">
+        <img src={Arrow} alt="<-" onClick={()=>window.location.href="/dashboard"}/>
+        <h1> Exam Details </h1>
+      </div>
       <div className="exD_1">
         <h2> Choose Subject </h2>{" "}
         <Dropdown

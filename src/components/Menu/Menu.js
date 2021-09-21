@@ -66,7 +66,7 @@ const Menu = ({ changeAuth }) => {
         onClick={() => {
           Cookie.set("teacher", undefined);
           changeAuth(false);
-          window.location.href = "/";
+          window.location.href = "/signin";
         }}
       >
         Sign out

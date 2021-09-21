@@ -21,24 +21,31 @@ const Navigation = () => {
     if (token !== undefined && token.length !== 0) {
       Cookie.set("teacher", token);
       Main.changeAuth(true);
+      Main.toggleMenu(true);
       window.location.href = "/dashboard";
     }
   };
 
   return (
     <div>
-      {Main.Auth ? <Menu changeAuth={Main.changeAuth} /> : null}
+      {Main.Auth &&
+      Main.ActiveRoute !== "ExamDetails" &&
+      Main.ActiveRoute !== "ExamCreator" ? (
+        <Menu changeAuth={Main.changeAuth} />
+      ) : null}
       <Switch>
         <Route
           path="/"
           exact
           render={() => {
+            Main.updateActiveRoute("Home");
             return !Main.Auth ? <Home /> : <Redirect to="/dashboard" />;
           }}
         />
         <Route
           path="/signin"
           render={() => {
+            Main.updateActiveRoute("SignIn");
             return !Main.Auth ? (
               <SignIn HandleAuth={HandleAuth} />
             ) : (
@@ -49,36 +56,42 @@ const Navigation = () => {
         <Route
           path="/dashboard"
           render={() => {
+            Main.updateActiveRoute("Dashboard");
             return Main.Auth ? <Dashboard /> : <Redirect to="/signin" />;
           }}
         />
         <Route
           path="/studentpage"
           render={() => {
+            Main.updateActiveRoute("Student Page");
             return Main.Auth ? <StudentsPage /> : <Redirect to="/signin" />;
           }}
         />
         <Route
           path="/teacherpage"
           render={() => {
+            Main.updateActiveRoute("Teacher Page");
             return Main.Auth ? <TeachersPage /> : <Redirect to="/signin" />;
           }}
         />
         <Route
           path="/examdetails"
           render={() => {
+            Main.updateActiveRoute("ExamDetails");
             return Main.Auth ? <ExamDetails /> : <Redirect to="/signin" />;
           }}
         />
         <Route
           path="/coursepage"
           render={() => {
+            Main.updateActiveRoute("Course Page");
             return Main.Auth ? <CoursePage /> : <Redirect to="/signin" />;
           }}
         />
         <Route
           path="/examcreator"
           render={() => {
+            Main.updateActiveRoute("ExamCreator");
             return Main.Auth ? <ExamCreator /> : <Redirect to="/signin" />;
           }}
         />

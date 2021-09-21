@@ -6,7 +6,22 @@
   align-items: space-between;
   width: 100%;
 }
-.exMD_title {
+.exMD_title{
+  display: flex;
+  width: 100%;
+  justify-content: left;
+  align-items: left;
+}
+.exMD_title > img{
+  margin-top: 2%;
+  margin-left: 1%;
+  width: 6%;
+  height: 10%;
+  transform: rotate(180deg);
+  margin-right: 35%;
+  cursor: pointer;
+}
+.exMD_title > h1{
   text-align: center;
   font-size: 3rem;
   font-weight: 600;
