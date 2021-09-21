@@ -25,11 +25,7 @@ const App = () => {
   const url = "https://xamify.herokuapp.com/api";
 
   const RefreshAccessToken = () => {
-    let d = new Date();
-    let diff = d - refreshTokenManager;
-    if (Math.floor(diff / 60e3) < 10) {
-      return;
-    }
+    
     axios
       .post(url + "/auth/token", {
         token: Cookie.get("refresh"),

@@ -73,7 +73,7 @@ const Dashboard = () => {
           });
         });
     }
-  }, [Main]);
+  }, [Main, AssessmentDetails]);
 
   return (
     <div className="dashboard">
