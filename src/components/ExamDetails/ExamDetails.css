@@ -91,46 +91,6 @@
   margin-bottom: 2%;
   font-family: 'Montserrat', sans-serif;
 }
-.pub_dtls_1 {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-self: space-between;
-  margin-left: 4%;
-  margin-bottom: 2%;
-}
-.pub_dtls_1 > input[type="date"]{
-  align-self: center;
-  margin-right: 75%;
-  margin-top: 2%;
-  transform: scale(2);
-}
-.pub_tl_1 {
-  font-size: 1.8rem;
-  font-weight: 400;
-  margin-bottom: 2%;
-  font-family: 'Montserrat', sans-serif;
-}
-.pub_dtls_2 {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-self: space-between;
-  margin-left: 4%;
-  margin-bottom: 1%;
-}
-.pub_dtls_2 > input[type="time"]{
-  align-self: center;
-  transform: scale(2);
-  margin-right: 82%;
-  margin-top: 2%;
-}
-.pub_tl_2 {
-  font-size: 1.8rem;
-  font-weight: 400;
-  margin-bottom: 2%;
-  font-family: 'Montserrat', sans-serif;
-}
 .exmD_btn {
   align-self: center;
   appearance: button;
@@ -172,3 +132,34 @@
     rgba(50, 50, 93, 0.2) 0 6px 15px 0, rgba(0, 0, 0, 0.1) 0 2px 2px 0,
     rgba(82, 211, 50, 0.3) 0 0 0 4px;
 }
+.pub_1, .pub_2{
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: left;
+  width: 60%;
+  margin-left: 4%;
+}
+.pub_1 > h2, .pub_2 > h2{
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin-bottom: 2%;
+  font-family: 'Montserrat', sans-serif;
+}
+.pub_1 > div, .pub_2 > div{
+  margin-top: 2%;
+  margin-bottom: 2%;
+  margin-left: 5%;
+  display: flex;
+  justify-content: left;
+  align-items: left;
+}
+.pub_1 > div > input[type="date"], .pub_2 > div > input[type="date"]{
+  transform: scale(1.5);
+}
+.pub_1 > div > input[type="time"], .pub_2 > div > input[type="time"]{
+  transform: scale(1.5);
+  margin-left: 10%;
+}
+
+

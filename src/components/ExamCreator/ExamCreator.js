@@ -357,11 +357,19 @@ const ExamCreator = (props) => {
             <button
               className="pblsh"
               onClick={() => {
+                let qq = questions;
+                delete qq.choices;
+                qq.map((item, index)=>{
+                  if (item.id){
+                    qq.splice(index, 1);
+                  }return null;
+                });
+                console.log(qq);
                 axios
                   .post(
                     Main.url + `/assessments/${ExamId}`,
                     {
-                      questions: questions,
+                      questions: qq,
                     },
                     {
                       headers: { Authorization: Main.AccessToken },
