@@ -16,7 +16,7 @@ const SignIn = ({ HandleAuth }) => {
         password: password,
       })
       .then((response) => {
-        HandleAuth(response.data.accessToken);
+        HandleAuth(response.data.accessToken, response.data.refreshToken);
       })
       .catch((err) => {
         return;

@@ -17,22 +17,21 @@ const App = () => {
   const [AccessToken, update_Token] = useState(null);
   const [userInfo, update_Info] = useState({});
   const [ActiveRoute, update_ActiveRoute] = useState("Home");
+  const [isError, toggleErrorStatus] = useState({is: true, info: "Testing..."});
   const url = "https://xamify.herokuapp.com/api";
 
   const RefreshAccessToken = () => {
-    return;
-    console.log("Called");
     axios //This is not working... !@@
-      .post(
-        url + "/auth/token",
-        {},
-        {
-          token: Cookie.get("teacher"),
-        }
-      )
+      .post(url + "/auth/token", {
+        token: Cookie.get("refresh"),
+      })
       .then((response) => {
+        if (!Auth){
+          return;
+        }
         Cookie.set("teacher", response.data.accessToken);
-        console.log(response.data);
+        Cookie.set("refresh", response.data.refreshToken);
+        setTimeout(() => RefreshAccessToken(), 10 * 60 * 1000);
       });
   };
 
@@ -45,9 +44,7 @@ const App = () => {
       }
       axios
         .get(`${url}/auth/me`, {
-          headers: {
-            Authorization: AccessToken,
-          },
+          headers: { Authorization: `Bearer ${cookieValue}` },
         })
         .then((response) => {
           update_Info(response.data);
@@ -67,13 +64,15 @@ const App = () => {
     <AuthContext.Provider
       value={{
         Auth,
-        changeAuth,
+        changeAuth: (val) => changeAuth(val),
         AccessToken,
         userInfo,
         url,
         RefreshAccessToken,
         ActiveRoute,
-        updateActiveRoute: update_ActiveRoute,
+        updateActiveRoute:(val) =>  update_ActiveRoute(val),
+        isError,
+        toggleErrorBox: (val) => toggleErrorStatus(val),
       }}
     >
       <Router>

@@ -18,9 +18,8 @@ font-family: 'Roboto', sans-serif;
   letter-spacing: 2px;
 }
 .exmCr_1 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  display: grid;
+  grid-template-columns: 10fr 1fr;
   width: 100%;
   margin-top: 2%;
 }
@@ -29,7 +28,7 @@ font-family: 'Roboto', sans-serif;
   flex-direction: column;
   justify-content: left;
   align-items: left;
-  width: 100%;
+  width: 80%;
 }
 .exmCr_1_1 > h2 {
   font-size: 2rem;
@@ -92,7 +91,10 @@ font-family: 'Roboto', sans-serif;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 60%;
+  width: 100%;
+  position: absolute;
+  right: -38%;
+  top: 28%;
 }
 .exmCr_btns {
   display: flex;

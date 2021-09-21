@@ -1,0 +1,19 @@
+.errorBX{
+    display: flex;
+    justify-content: space-between;
+    align-items: space-between;
+    background: green;
+    position: fixed;
+    top: 0%;
+    right: 10%;
+}
+.errorBx > img{
+    width: 10%;
+}
+.erBx_1{
+    width: 100%;
+    display: flex;
+    justify-content: left;
+    align-items: left;
+}
+

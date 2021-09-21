@@ -1,22 +1,29 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
+import axios from "axios";
+import AuthContext from "../../Context";
 import "./ExamCreator.css";
 
-const ExamCreator = () => {
-  const [questions, set_questions] = useState([
-    {
-      question: "What is a thread?",
-      type: "Type",
-    },
-    {
-      question: "What are some task scheduling algorithms used by OS?",
-      type: "MCQ",
-      choices: ["Round-Robin Scheduling", "FCFS algo", "all of the above"],
-    },
-    {
-      question: "What do you mean by IPC?",
-      type: "Type",
-    },
-  ]);
+const sampleData = [
+  {
+    question: "What is a thread?",
+    type: "Type",
+  },
+  {
+    question: "What are some task scheduling algorithms used by OS?",
+    type: "MCQ",
+    choices: ["Round-Robin Scheduling", "FCFS algo", "all of the above"],
+  },
+  {
+    question: "What do you mean by IPC?",
+    type: "Type",
+  },
+];
+
+const ExamCreator = (props) => {
+  const Main = useContext(AuthContext);
+  const [ExamDetails, update_Details] = useState([]);
+  const [fetchedQues, set_Fques] = useState([]); //Pre-existing questions... ideal for editing the test later.
+  const [questions, set_questions] = useState([]);
   const [instructions, set_instructions] = useState("");
 
   const [DeleteQBox, ToggleDelQBx] = useState({
@@ -36,8 +43,34 @@ const ExamCreator = () => {
   const [choice2, change_choice2] = useState("");
   const [choice3, change_choice3] = useState("");
   const [choice4, change_choice4] = useState("");
+  const ExamId = props.match.params.id;
+
+  const getMode = () => {
+    let a = ExamDetails;
+    return TypeOfAnswering === 0
+      ? "MCQ"
+      : a.length === 0 || a.type === "DIGITAL"
+      ? "TYPE"
+      : "IMAGE";
+  };
 
   useEffect(() => {
+    if (Main.AccessToken !== null && fetchedQues.length === 0) {
+      axios
+        .get(Main.url + `/assessments/${ExamId}`, {
+          headers: {
+            Authorization: Main.AccessToken,
+          },
+        })
+        .then((response) => {
+          set_Fques(response.data.questions);
+          set_questions(response.data.questions);
+          update_Details(response.data);
+        })
+        .catch((e) => {
+          Main.RefreshAccessToken();
+        });
+    }
     let idx = AddProblemBoxOpen.editor;
     if (idx !== -1) {
       set_TypeOfAns(questions[idx].type === "MCQ" ? 0 : 1);
@@ -46,7 +79,7 @@ const ExamCreator = () => {
         set_MxChoice(questions[idx].choices.length);
       }
     }
-  }, [questions, AddProblemBoxOpen]);
+  }, [questions, AddProblemBoxOpen, Main, fetchedQues]);
 
   return (
     <div className="examCreator">
@@ -110,7 +143,13 @@ const ExamCreator = () => {
                   set_TypeOfAns(1);
                 }}
               />
-              <h3>Type</h3>
+              <h3>
+                {ExamDetails.length === 0
+                  ? "Typed"
+                  : ExamDetails.type === "DIGITAL"
+                  ? "Typed"
+                  : "Image Upload"}
+              </h3>
             </div>
           </div>
         </div>
@@ -204,30 +243,28 @@ const ExamCreator = () => {
               let qObj = questions;
               if (k === 1) {
                 qObj.push({
-                  question: ProblemStatement,
-                  type: TypeOfAnswering === 0 ? "MCQ" : "Type",
+                  text: ProblemStatement,
+                  type: getMode(),
+                  choices: [],
                 });
               } else {
-                qObj[n - 1].question = ProblemStatement;
-                qObj[n - 1].type = TypeOfAnswering === 0 ? "MCQ" : "Type";
+                qObj[n - 1].text = ProblemStatement;
+                qObj[n - 1].type = getMode();
+                qObj[n - 1].choices = [];
               }
-              if (TypeOfAnswering === 0) {
-                if (choice1.trim() === "" && choice2 === "") {
-                  return;
-                }
-                qObj[n - 1]["choices"] = [choice1, choice2];
-                if (MaxChoice >= 3) {
-                  if (choice3.trim() === "") {
-                    return;
-                  }
-                  qObj[n - 1].choices.push(choice3);
-                }
-                if (MaxChoice === 4) {
-                  if (choice4.trim() === "") {
-                    return;
-                  }
-                  qObj[n - 1].choices.push(choice4);
-                }
+              if (typeof qObj[n - 1]['choices'] === undefined){
+                qObj[n - 1]['choices'] = [];
+              }
+              if (choice1.trim() === "" && choice2.trim() === "") {
+                return;
+              }
+              qObj.choices = [{ text: choice1 }];
+              qObj.choices.push({ text: choice2 });
+              if (MaxChoice >= 3 && choice3.trim() !== "") {
+                qObj.choices.push({ text: choice3 });
+              }
+              if (MaxChoice === 4 && choice4.trim() !== "") {
+                qObj.choices.push({ text: choice4 });
               }
               set_questions(qObj);
               ToggleAddPrBox({ is: false, editor: -1 });
@@ -252,7 +289,9 @@ const ExamCreator = () => {
             !AddProblemBoxOpen.is && !DeleteQBox.is ? "all" : "none",
         }}
       >
-        Operating Systems
+        {ExamDetails.length === 0
+          ? "Failed to load Subject"
+          : ExamDetails.subject.name}
       </h1>
       <div
         className="exmCr_1"
@@ -262,43 +301,79 @@ const ExamCreator = () => {
             !AddProblemBoxOpen.is && !DeleteQBox.is ? "all" : "none",
         }}
       >
-        <div className="exmCr_1_1">
-          <h2>All questions</h2>
-          <div className="q_cards">
-            {questions.map((item, index) => {
-              return (
-                <div className="q_crd">
-                  <h3>{`Q.${index + 1} ${item.question}`}</h3>
-                  <div>
-                    <p
-                      onClick={() => {
-                        ToggleAddPrBox({ is: true, editor: index });
-                      }}
-                    >
-                      edit
-                    </p>
-                    <p
-                      onClick={() => {
-                        return ToggleDelQBx({ is: true, index: index });
-                      }}
-                    >
-                      remove
-                    </p>
+        {questions.length !== 0 ? (
+          <div
+            className="exmCr_1_1"
+            style={{
+              transform: `translate(0%, ${
+                questions.length >= 3 ? 0 : questions.length === 1 ? -30 : -20
+              }%)`,
+            }}
+          >
+            <h2 className="exmCr_1_1_tl">All questions</h2>
+            <div className="q_cards">
+              {questions.map((item, index) => {
+                return (
+                  <div className="q_crd" key={index}>
+                    <h3>{`Q.${index + 1} ${item.text}`}</h3>
+                    <div>
+                      <p
+                        onClick={() => {
+                          ToggleAddPrBox({ is: true, editor: index });
+                        }}
+                      >
+                        edit
+                      </p>
+                      <p
+                        onClick={() => {
+                          return ToggleDelQBx({ is: true, index: index });
+                        }}
+                      >
+                        remove
+                      </p>
+                    </div>
                   </div>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
           </div>
-        </div>
+        ) : (
+          <div className="exmCr_1_1">
+            <h2>Start creating your test by clicking here.</h2>
+          </div>
+        )}
         <div className="exmCr_1_2">
           <div className="exmCr_btns">
             <button
               className="add_prb"
-              onClick={() => ToggleAddPrBox({ is: true, editor: -1 })}
+              onClick={() => {
+                set_TypeOfAns(0);
+                set_PrStat("");
+                ToggleAddPrBox({ is: true, editor: -1 });
+              }}
             >
               Add Problem +{" "}
             </button>
-            <button className="pblsh">Publish</button>
+            <button
+              className="pblsh"
+              onClick={() => {
+                axios
+                  .post(
+                    Main.url + `/assessments/${ExamId}`,
+                    {
+                      questions: questions,
+                    },
+                    {
+                      headers: { Authorization: Main.AccessToken },
+                    }
+                  )
+                  .then((response) => {
+                    console.log(response);
+                  });
+              }}
+            >
+              Publish
+            </button>
           </div>
           <div className="exmCr_Inst">
             <h1>Instructions</h1>

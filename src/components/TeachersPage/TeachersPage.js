@@ -63,13 +63,13 @@ const TeachersPage = () => {
     if (!searchQuery) {
       return update_List(teachers);
     }
-    for (const key of displayList) {
+    for (const key of teachers) {
       if (key.Name.includes(searchQuery)) {
         obj.push(key);
       }
     }
     update_List(obj);
-  }, [teachers, searchQuery, displayList, Main]);
+  }, [teachers, searchQuery, Main]);
 
   return (
     <div className="stud-page">
@@ -96,7 +96,7 @@ const TeachersPage = () => {
               return;
             })
             .catch((err) => {
-              Main.RefreshAccessToken();
+              Main.RefreshAccessToken(); //?? Would this be feasible?
             });
         }}
       />
@@ -118,7 +118,6 @@ const TeachersPage = () => {
       </div>
       <div className="st_2">
         <div className="st_2_1">
-          {teachers.length !== 0 ? (
             <input
               type="text"
               placeholder="Search Teacher"
@@ -126,8 +125,8 @@ const TeachersPage = () => {
               onChange={(e) => {
                 update_Query(e.target.value);
               }}
+              disabled={teachers.length === 0}
             />
-          ) : null}
         </div>
         <div
           className="st_2_2"

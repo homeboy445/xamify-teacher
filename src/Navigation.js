@@ -6,20 +6,20 @@ import SignIn from "./components/SignIn/SignIn";
 import Menu from "./components/Menu/Menu";
 import Dashboard from "./components/Dashboard/Dashboard";
 import StudentsPage from "./components/StudentsPage/StudentsPage";
-import axios from "axios";
 import Cookie from "js-cookie";
-import ProtectedRoutes from "./components/ProtectedRoutes/ProtectedRoutes";
 import ExamDetails from "./components/ExamDetails/ExamDetails";
 import ExamCreator from "./components/ExamCreator/ExamCreator";
 import TeachersPage from "./components/TeachersPage/TeachersPage";
 import CoursePage from "./components/CoursePage/CoursePage";
+import ErrorBox from "./components/ErrorBox/ErrorBox";
 
 const Navigation = () => {
   const Main = useContext(AuthContext);
 
-  const HandleAuth = (token) => {
+  const HandleAuth = (token, rtoken) => {
     if (token !== undefined && token.length !== 0) {
       Cookie.set("teacher", token);
+      Cookie.set("refresh", rtoken);
       Main.changeAuth(true);
       Main.toggleMenu(true);
       window.location.href = "/dashboard";
@@ -89,13 +89,18 @@ const Navigation = () => {
           }}
         />
         <Route
-          path="/examcreator"
-          render={() => {
+          path="/examcreator/:id"
+          render={(props) => {
             Main.updateActiveRoute("ExamCreator");
-            return Main.Auth ? <ExamCreator /> : <Redirect to="/signin" />;
+            return Main.Auth ? (
+              <ExamCreator {...props} />
+            ) : (
+              <Redirect to="/signin" />
+            );
           }}
         />
       </Switch>
+      {Main.isError.is ? <ErrorBox info={Main.isError.is} /> : null}
     </div>
   );
 };

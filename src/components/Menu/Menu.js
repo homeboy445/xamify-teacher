@@ -19,9 +19,7 @@ const Menu = ({ changeAuth }) => {
       <h1 className="title">Xamify</h1>
       <div className="menu-1">
         <ImageFrame image={Dashboard_Icon} />
-        <h2>
-          {Main.userInfo.name || "Admin User"}
-        </h2>
+        <h2>{Main.userInfo.name || "Admin User"}</h2>
       </div>
       <div className="menu-2">
         <div>
@@ -30,7 +28,14 @@ const Menu = ({ changeAuth }) => {
             to="/dashboard"
             style={{ textDecoration: "none", color: "black" }}
           >
-            <h2 className="dshbrd">Dashboard</h2>
+            <h2
+              className="dshbrd"
+              style={{
+                color: Main.ActiveRoute === "Dashboard" ? "blue" : "black",
+              }}
+            >
+              Dashboard
+            </h2>
           </Link>
         </div>
         <div>
@@ -39,7 +44,14 @@ const Menu = ({ changeAuth }) => {
             to="/studentpage"
             style={{ textDecoration: "none", color: "black" }}
           >
-            <h2 className="studPage">Students</h2>
+            <h2
+              className="studPage"
+              style={{
+                color: Main.ActiveRoute === "Student Page" ? "blue" : "black",
+              }}
+            >
+              Students
+            </h2>
           </Link>
         </div>
         <div>
@@ -48,7 +60,14 @@ const Menu = ({ changeAuth }) => {
             to="/teacherpage"
             style={{ textDecoration: "none", color: "black" }}
           >
-            <h2 className="teachPage">Teachers</h2>
+            <h2
+              className="teachPage"
+              style={{
+                color: Main.ActiveRoute === "Teacher Page" ? "blue" : "black",
+              }}
+            >
+              Teachers
+            </h2>
           </Link>
         </div>
         <div>
@@ -57,7 +76,14 @@ const Menu = ({ changeAuth }) => {
             to="/coursepage"
             style={{ textDecoration: "none", color: "black" }}
           >
-            <h2 className="coursePage">Course</h2>
+            <h2
+              className="coursePage"
+              style={{
+                color: Main.ActiveRoute === "Course Page" ? "blue" : "black",
+              }}
+            >
+              Course
+            </h2>
           </Link>
         </div>
       </div>
@@ -65,6 +91,7 @@ const Menu = ({ changeAuth }) => {
         className="SignOut"
         onClick={() => {
           Cookie.set("teacher", undefined);
+          Cookie.set("refresh", undefined);
           changeAuth(false);
           window.location.href = "/signin";
         }}
