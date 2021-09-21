@@ -25,7 +25,6 @@ const App = () => {
   const url = "https://xamify.herokuapp.com/api";
 
   const RefreshAccessToken = () => {
-    
     axios
       .post(url + "/auth/token", {
         token: Cookie.get("refresh"),
