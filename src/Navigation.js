@@ -23,7 +23,6 @@ const Navigation = () => {
       Cookie.set("teacher", token);
       Cookie.set("refresh", `${rtoken}|${new Date().toISOString()}`);
       Main.changeAuth(true);
-      Main.toggleMenu(true);
       window.location.href = "/dashboard";
     }
   };

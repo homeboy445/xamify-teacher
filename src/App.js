@@ -62,6 +62,11 @@ const App = () => {
           headers: { Authorization: `Bearer ${cookieValue}` },
         })
         .then((response) => {
+          if (response.data.type === "STUDENT") {
+            changeAuth(false);
+            Cookie.set("teacher", undefined);
+            return;
+          }
           update_Info(response.data);
         })
         .catch((err) => {

@@ -11,7 +11,6 @@ const Dashboard = () => {
   const [Show_Active, set_SActive] = useState(true);
   const [Show_Upcoming, set_SUpcoming] = useState(true);
   const [Show_Previous, set_PAttempted] = useState(true);
-  const [shownErrorMessage, set_EMessage] = useState(false);
   const [DetailBox, toggleDetailBox] = useState({
     is: false,
     object: {
@@ -42,7 +41,6 @@ const Dashboard = () => {
           headers: { Authorization: Main.AccessToken },
         })
         .then((response) => {
-          set_EMessage(false);
           let obj = [];
           response.data.map((item) => {
             if (item.author.email !== Main.userInfo.email) {
@@ -72,17 +70,7 @@ const Dashboard = () => {
           update_group(obj);
         })
         .catch((err) => {
-          Main.RefreshAccessToken(); // All of this section might cause problems
-          if (shownErrorMessage) {
-            //and so, should be changed if needed
-            return;
-          }
-          set_EMessage(true);
-          Main.toggleErrorBox({
-            //Might be responsible for a possible loop. !loop
-            is: true,
-            info: "Some error has occured while fetching assessments",
-          });
+          Main.RefreshAccessToken();
         });
     }
   }, [Main, AssessmentGrouped]);
