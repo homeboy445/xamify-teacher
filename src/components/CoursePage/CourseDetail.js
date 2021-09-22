@@ -122,7 +122,10 @@ const CourseDetail = (props) => {
               toggle_DBx(false);
             })
             .catch((err) => {
-                Main.toggleErrorBox({is: true, info: "An error occured while adding new subject. Operation unsuccessful."})
+              Main.toggleErrorBox({
+                is: true,
+                info: "An error occured while adding new subject. Operation unsuccessful.",
+              });
             });
         }}
       />
