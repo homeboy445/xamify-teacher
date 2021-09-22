@@ -17,7 +17,6 @@ const App = () => {
   const [AccessToken, update_Token] = useState(null);
   const [userInfo, update_Info] = useState({});
   const [ActiveRoute, update_ActiveRoute] = useState("Home");
-  const [refreshTokenManager, update_Manager] = useState(new Date());
   const [isError, toggleErrorStatus] = useState({
     is: false,
     info: "Testing...",
@@ -25,9 +24,21 @@ const App = () => {
   const url = "https://xamify.herokuapp.com/api";
 
   const RefreshAccessToken = () => {
+    let refCookie = Cookie.get("refresh");
+    if (refCookie === "undefined" || typeof refreshCookie === undefined) {
+      return;
+    }
+    refCookie = refCookie.split("|");
+    let refreshToken = refCookie[0],
+      t1 = new Date(),
+      t2 = new Date(refCookie[1]);
+    let diff = Math.floor((t1 - t2) / 60e3);
+    if (diff < 10) {
+      return;
+    }
     axios
       .post(url + "/auth/token", {
-        token: Cookie.get("refresh"),
+        token: refreshToken,
       })
       .then((response) => {
         if (!Auth) {
@@ -35,6 +46,7 @@ const App = () => {
         }
         Cookie.set("teacher", response.data.accessToken);
         Cookie.set("refresh", response.data.refreshToken);
+        update_Token(`Bearer ${response.data.accessToken}`);
       });
   };
 
@@ -42,7 +54,6 @@ const App = () => {
     let cookieValue = Cookie.get("teacher");
     if (isCookieAlive()) {
       update_Token(`Bearer ${cookieValue}`);
-      update_Manager(new Date());
       if (!Auth) {
         changeAuth(true);
       }

@@ -20,6 +20,7 @@ const StudentsPage = () => {
           headers: { Authorization: Main.AccessToken },
         })
         .then((response) => {
+          // console.log(response.data);
           set_students(response.data);
           update_Status(true);
         })
@@ -37,7 +38,7 @@ const StudentsPage = () => {
       }
     }
     update_List(obj);
-  }, [students, searchQuery]);
+  }, [Main, students, searchQuery]);
 
   return (
     <div className="stud-page">
@@ -48,28 +49,31 @@ const StudentsPage = () => {
         closeBox={() => {
           toggle_DBx(false);
         }}
-        onSubmitCallback={(student) => {
-          console.log(student);
-          return;
+        onSubmitCallback={(student, url) => {
+          // console.log(student);
           axios
-            .post( //it's working... !@@
-              Main.url + "/students",
-              {
-                'email': student.email,
-                'name': student.name,
-                'rollNo': student.rollNo,
-                'dob': student.dob,
-                'yearId': student.yearId,
-                'courseId': student.courseId,
-              },
+            .post(
+              Main.url + url,
+              student,
               {
                 headers: { Authorization: Main.AccessToken },
-                "content-type": "application/json",
               }
             )
             .then((response) => {
-              console.log(response.data);
+              let ss = students;
+              response.data.map(item=>{
+                return ss.push(item);
+              });
+              set_students(ss);
               toggle_DBx(false);
+            })
+            .catch((err) => {
+              console.log(err);
+              Main.toggleErrorBox({
+                is: true,
+                info: "An error occured while adding new student. Operation unsuccessful.",
+              });
+              Main.RefreshAccessToken();
             });
         }}
       />

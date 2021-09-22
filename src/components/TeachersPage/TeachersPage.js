@@ -80,11 +80,12 @@ const TeachersPage = () => {
         closeBox={() => {
           toggle_DBx(false);
         }}
-        onSubmitCallback={(email, password) => {
+        onSubmitCallback={(name, email, password) => {
           axios
             .post(
               Main.url + "/teachers",
               {
+                name: name,
                 email: email,
                 password: password,
               },
@@ -93,10 +94,11 @@ const TeachersPage = () => {
               }
             )
             .then((response) => {
+              toggle_DBx(false);
               return;
             })
             .catch((err) => {
-              Main.RefreshAccessToken(); //?? Would this be feasible?
+              Main.RefreshAccessToken();
             });
         }}
       />
@@ -137,15 +139,15 @@ const TeachersPage = () => {
         >
           {displayList.length > 0 ? (
             displayList.map((item, index) => {
-              item.Name =
-                item.Name === null || item.Name === undefined
+              item.name =
+                item.name === null || item.name === undefined
                   ? "Admin"
-                  : item.Name;
+                  : item.name;
               return (
                 <Card
                   key={index}
-                  image={`https://avatars.dicebear.com/api/initials/${item.Name}.svg`}
-                  Name={item.Name}
+                  image={`https://avatars.dicebear.com/api/initials/${item.name}.svg`}
+                  Name={item.name}
                   Subjects={[]}
                   Creds={[item.course, item.year]}
                 />

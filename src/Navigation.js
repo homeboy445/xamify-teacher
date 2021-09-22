@@ -11,7 +11,9 @@ import ExamDetails from "./components/ExamDetails/ExamDetails";
 import ExamCreator from "./components/ExamCreator/ExamCreator";
 import TeachersPage from "./components/TeachersPage/TeachersPage";
 import CoursePage from "./components/CoursePage/CoursePage";
+import CourseDetail from "./components/CoursePage/CourseDetail";
 import ErrorBox from "./components/ErrorBox/ErrorBox";
+
 
 const Navigation = () => {
   const Main = useContext(AuthContext);
@@ -19,7 +21,7 @@ const Navigation = () => {
   const HandleAuth = (token, rtoken) => {
     if (token !== undefined && token.length !== 0) {
       Cookie.set("teacher", token);
-      Cookie.set("refresh", rtoken);
+      Cookie.set("refresh", `${rtoken}|${new Date().toISOString()}`);
       Main.changeAuth(true);
       Main.toggleMenu(true);
       window.location.href = "/dashboard";
@@ -99,6 +101,18 @@ const Navigation = () => {
             );
           }}
         />
+        <Route
+          path="/coursedetails/:id"
+          render={(props) => {
+            Main.updateActiveRoute("CourseDetail");
+            return Main.Auth ? (
+              <CourseDetail {...props} />
+            ) : (
+              <Redirect to="/signin" />
+            );
+          }}
+        />
+        <Redirect from="*" to="/" />
       </Switch>
       {Main.isError.is ? <ErrorBox info={Main.isError.info} /> : null}
     </div>

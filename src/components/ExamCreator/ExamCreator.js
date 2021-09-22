@@ -371,7 +371,14 @@ const ExamCreator = (props) => {
                     }
                   )
                   .then((response) => {
-                    console.log(response);
+                    window.location.href = "/dashboard";
+                  })
+                  .catch((err) => {
+                    Main.RefreshAccessToken();
+                    Main.toggleErrorBox({
+                      is: true,
+                      info: "Something's wrong. Try again later.",
+                    });
                   });
               }}
             >

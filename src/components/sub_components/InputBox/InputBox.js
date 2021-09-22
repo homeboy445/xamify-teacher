@@ -4,6 +4,7 @@ import user from "../../../assets/icons/user.svg";
 import email from "../../../assets/icons/email.svg";
 import password from "../../../assets/icons/password.svg";
 import rollno from "../../../assets/icons/rollno.svg";
+import study from "../../../assets/icons/study.png";
 
 const InputBox = ({ placeholder, type, onChangeCallback, value }) => {
   return (
@@ -22,7 +23,9 @@ const InputBox = ({ placeholder, type, onChangeCallback, value }) => {
             : type === "text"
             ? placeholder === "Roll Number"
               ? rollno
-              : user
+              : placeholder === "First Name" || placeholder === "Second Name"
+              ? user
+              : study
             : password
         }
         alt={type}

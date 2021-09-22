@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import "./SignIn.css";
 import axios from "axios";
-import Cookie from "js-cookie";
 import InputBox from "../sub_components/InputBox/InputBox";
 
 const SignIn = ({ HandleAuth }) => {

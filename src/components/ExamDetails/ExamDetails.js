@@ -34,7 +34,9 @@ const ExamDetails = () => {
         .then((response) => {
           update_List(response.data);
           set_Subject(response.data[0].name);
-        });
+        }).catch(err=>{
+          Main.RefreshAccessToken();
+        })
     }
   }, [Main]);
 
@@ -92,6 +94,7 @@ const ExamDetails = () => {
         window.location.href = `/examcreator/${response.data.id}`;
       })
       .catch((err) => {
+        Main.RefreshAccessToken();
         Main.toggleErrorBox({
           is: true,
           info: "There was an error, try again later.",

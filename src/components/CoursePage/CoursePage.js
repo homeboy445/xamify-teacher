@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import AuthContext from "../../Context";
-import Cookie from "js-cookie";
 import Card from "../sub_components/Card/Card";
 import AddUserBox from "../sub_components/AddUserBox/AddUserBox";
+import DeletePrompt from "../DeletePrompt/DeletePrompt";
 
 const CoursePage = () => {
   const Main = useContext(AuthContext);
@@ -28,17 +28,49 @@ const CoursePage = () => {
   ]);
   const [displayList, update_List] = useState(course);
   const [searchQuery, update_Query] = useState("");
+  const [fetchedResources, update_Status] = useState(false);
+  const [DeletePromptBox, toggleDelPrmpt] = useState({ is: false, id: null });
+
+  const getMaxYear = (year) => {
+    let mxAr = [0];
+    try {
+      year.map((item) => {
+        let s = item.label;
+        for (var i = 0; i < s.length; i++) {
+          if (!isNaN(s[i])) {
+            mxAr.push(parseInt(s[i]));
+          }
+        }
+        return null;
+      });
+    } catch {
+      mxAr = [0];
+    }
+    let mx = 0;
+    mxAr.map((item) => {
+      if (!isNaN(item)) {
+        mx = Math.max(mx, item);
+      }
+      return null;
+    });
+    return mx;
+  };
 
   useEffect(() => {
-    if (Main.accessToken !== null) {
+    if (Main.accessToken !== null && !fetchedResources) {
       axios
-        .get("https://xamify.herokuapp.com/api/courses", {
+        .get(Main.url + "/courses/subjects/all", {
           headers: {
-            Authorization: `Bearer ${Main.AccessToken}`,
-          }
+            Authorization: Main.AccessToken,
+          },
         })
         .then((response) => {
-          console.log(response);
+          set_course(response.data);
+          update_List(response.data);
+          update_Status(true);
+        })
+        .catch((err) => {
+          Main.RefreshAccessToken();
         });
     }
     let obj = [];
@@ -46,28 +78,69 @@ const CoursePage = () => {
       return update_List(course);
     }
     for (const key of displayList) {
-      if (key.course.includes(searchQuery)) {
+      if (key.name.includes(searchQuery)) {
         obj.push(key);
       }
     }
     update_List(obj);
-  }, [course, searchQuery, displayList, Main]);
+  }, [course, searchQuery, Main]);
 
   return (
     <div className="stud-page">
+      {DeletePromptBox.is ? (
+        <DeletePrompt
+          message={"Are you sure about deleting this course?"}
+          callback={() => {
+            axios
+              .delete(Main.url + `/courses/${DeletePromptBox.id}`, {
+                headers: { Authorization: Main.AccessToken },
+              })
+              .then((response) => {
+                window.location.href = "/coursepage";
+              })
+              .catch((err) => {
+                Main.toggleErrorBox({
+                  is: true,
+                  info: "Delete Operation failed. Try again later.",
+                });
+              });
+          }}
+          closeCallback={() => toggleDelPrmpt(false)}
+        />
+      ) : null}
       <AddUserBox
         DetailBox={DetailBox}
-        title={"Add a new Teacher"}
-        type="teacher"
+        title={"Add a new Course"}
+        type="course"
         closeBox={() => {
           toggle_DBx(false);
+        }}
+        onSubmitCallback={(name) => {
+          axios
+            .post(
+              Main.url + "/courses",
+              { name: name.trim() },
+              {
+                headers: { Authorization: Main.AccessToken },
+              }
+            )
+            .then((response) => {
+              window.location.href = "/coursepage";
+            })
+            .catch((err) => {
+              Main.RefreshAccessToken();
+              Main.toggleErrorBox({
+                is: true,
+                info: "An error occured while adding new course. Operation unsuccessful.",
+              });
+            });
         }}
       />
       <div
         className="stud-title"
         style={{
-          pointerEvents: DetailBox ? "none" : "all",
-          opacity: DetailBox ? 0.5 : 1,
+          pointerEvents: DetailBox || DeletePromptBox.is ? "none" : "all",
+          opacity: DetailBox || DeletePromptBox.is ? 0.5 : 1,
         }}
       >
         <h1 className="s-title">Courses</h1>
@@ -81,22 +154,21 @@ const CoursePage = () => {
       </div>
       <div className="st_2">
         <div className="st_2_1">
-          {course.length !== 0 ? (
-            <input
-              type="text"
-              placeholder="Search Courses"
-              value={searchQuery}
-              onChange={(e) => {
-                update_Query(e.target.value);
-              }}
-            />
-          ) : null}
+          <input
+            type="text"
+            placeholder="Search Courses"
+            value={searchQuery}
+            onChange={(e) => {
+              update_Query(e.target.value);
+            }}
+            disabled={course.length === 0}
+          />
         </div>
         <div
           className="st_2_2"
           style={{
-            pointerEvents: DetailBox ? "none" : "all",
-            opacity: DetailBox ? 0.5 : 1,
+            pointerEvents: DetailBox || DeletePromptBox.is ? "none" : "all",
+            opacity: DetailBox || DeletePromptBox.is ? 0.5 : 1,
           }}
         >
           {displayList.length > 0 ? (
@@ -105,14 +177,14 @@ const CoursePage = () => {
                 <Card
                   key={index}
                   type="course"
-                  Name={item.course}
-                  Creds={[`${item.year} year course`]}
-                  Subjects={[
-                    { 1: ["sub1", "sub2", "sub3", "sub4", "sub5"] },
-                    { 2: ["sub1", "sub2", "sub3", "sub4", "sub5"] },
-                    { 3: ["sub1", "sub2", "sub3", "sub4", "sub5"] },
-                    { 4: ["sub1", "sub2", "sub3", "sub4", "sub5"] },
-                  ]}
+                  Name={item.name}
+                  Creds={[`${getMaxYear(item.years)} year course`]}
+                  callBack={() => {
+                    window.location.href = `/coursedetails/${item.id}`;
+                  }}
+                  removeCallback={() => {
+                    toggleDelPrmpt({ is: true, id: item.id });
+                  }}
                 />
               );
             })
