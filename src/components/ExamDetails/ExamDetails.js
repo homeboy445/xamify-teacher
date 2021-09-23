@@ -25,6 +25,7 @@ const ExamDetails = () => {
 
   useEffect(() => {
     if (Main.AccessToken !== null) {
+      Main.toggleLoader(true);
       axios
         .get(Main.url + "/subjects", {
           headers: {
@@ -34,6 +35,7 @@ const ExamDetails = () => {
         .then((response) => {
           update_List(response.data);
           set_Subject(response.data[0].name);
+          Main.toggleLoader(false);
         }).catch(err=>{
           Main.RefreshAccessToken();
         })

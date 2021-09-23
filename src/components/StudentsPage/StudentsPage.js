@@ -15,6 +15,7 @@ const StudentsPage = () => {
 
   useEffect(() => {
     if (Main.AccessToken !== null && !fetchStatus) {
+      Main.toggleLoader(true);
       axios
         .get(Main.url + "/students", {
           headers: { Authorization: Main.AccessToken },
@@ -23,6 +24,7 @@ const StudentsPage = () => {
           // console.log(response.data);
           set_students(response.data);
           update_Status(true);
+          Main.toggleLoader(false);
         })
         .catch((err) => {
           Main.RefreshAccessToken();

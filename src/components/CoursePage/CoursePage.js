@@ -58,6 +58,7 @@ const CoursePage = () => {
 
   useEffect(() => {
     if (Main.accessToken !== null && !fetchedResources) {
+      Main.toggleLoader(true);
       axios
         .get(Main.url + "/courses/subjects/all", {
           headers: {
@@ -68,6 +69,7 @@ const CoursePage = () => {
           set_course(response.data);
           update_List(response.data);
           update_Status(true);
+          Main.toggleLoader(false);
         })
         .catch((err) => {
           Main.RefreshAccessToken();

@@ -36,6 +36,7 @@ const Dashboard = () => {
       !Main.isError.is &&
       AssessmentGrouped.length === 0
     ) {
+      Main.toggleLoader(true);
       axios
         .get(Main.url + "/assessments", {
           headers: { Authorization: Main.AccessToken },
@@ -68,6 +69,7 @@ const Dashboard = () => {
           });
           update_Details(response.data);
           update_group(obj);
+          Main.toggleLoader(false);
         })
         .catch((err) => {
           Main.RefreshAccessToken();

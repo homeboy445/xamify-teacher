@@ -13,6 +13,7 @@ const App = () => {
   const [AccessToken, update_Token] = useState(null);
   const [userInfo, update_Info] = useState({});
   const [ActiveRoute, update_ActiveRoute] = useState("Home");
+  const [loading, toggleLoader] = useState(false);
   const [isError, toggleErrorStatus] = useState({
     is: false,
     info: "Testing...",
@@ -86,6 +87,13 @@ const App = () => {
         changeAuth: (val) => changeAuth(val),
         AccessToken,
         userInfo,
+        loading,
+        toggleLoader: (v) => {
+          toggleLoader(v);
+          if (v) {
+            setTimeout(() => toggleLoader(false), 15 * 1000);
+          }
+        },
         url,
         RefreshAccessToken,
         ActiveRoute,

@@ -8,31 +8,7 @@ const TeachersPage = () => {
   const Main = useContext(AuthContext);
   const [DetailBox, toggle_DBx] = useState(false);
   const [teachers, set_teachers] = useState([
-    {
-      Name: "Will Smith",
-      course: "Computer Science",
-      year: "2nd year",
-    },
-    {
-      Name: "Ray palmer",
-      course: "Mathematics",
-      year: "3rd year",
-    },
-    {
-      Name: "Tony Stark",
-      course: "Physics",
-      year: "4th year",
-    },
-    {
-      Name: "Bruce Banner",
-      course: "Physics",
-      year: "1st year",
-    },
-    {
-      Name: "Damian Wayne",
-      course: "Applied Sciences",
-      year: "1st year",
-    },
+    { name: "", course: "", year: "" },
   ]);
   const [displayList, update_List] = useState(teachers);
   const [searchQuery, update_Query] = useState("");
@@ -40,6 +16,7 @@ const TeachersPage = () => {
 
   useEffect(() => {
     if (Main.AccessToken !== null && !fetchStatus) {
+      Main.toggleLoader(true);
       axios
         .get(Main.url + "/teachers", {
           headers: { Authorization: Main.AccessToken },
@@ -54,6 +31,7 @@ const TeachersPage = () => {
           }
           set_teachers(obj);
           update_Status(true);
+          Main.toggleLoader(false);
         })
         .catch((err) => {
           Main.RefreshAccessToken();
@@ -120,15 +98,15 @@ const TeachersPage = () => {
       </div>
       <div className="st_2">
         <div className="st_2_1">
-            <input
-              type="text"
-              placeholder="Search Teacher"
-              value={searchQuery}
-              onChange={(e) => {
-                update_Query(e.target.value);
-              }}
-              disabled={teachers.length === 0}
-            />
+          <input
+            type="text"
+            placeholder="Search Teacher"
+            value={searchQuery}
+            onChange={(e) => {
+              update_Query(e.target.value);
+            }}
+            disabled={teachers.length === 0}
+          />
         </div>
         <div
           className="st_2_2"

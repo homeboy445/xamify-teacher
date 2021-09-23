@@ -55,6 +55,7 @@ const ExamCreator = (props) => {
 
   useEffect(() => {
     if (Main.AccessToken !== null && questions.length === 0) {
+      Main.toggleLoader(true);
       axios
         .get(Main.url + `/assessments/${ExamId}`, {
           headers: {
@@ -68,6 +69,7 @@ const ExamCreator = (props) => {
               info: "Editing is not supported yet. Redirecting to dashboard...",
             });
             setTimeout(() => (window.location.href = "/dashboard"), 10000);
+            Main.toggleLoader(false);
             return;
           }
           update_Details(response.data);

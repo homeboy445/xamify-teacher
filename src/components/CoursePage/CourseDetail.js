@@ -103,6 +103,7 @@ const CourseDetail = (props) => {
           if (name.trim() === "") {
             return;
           }
+          Main.toggleLoader(true);
           axios
             .post(
               Main.url + "/subjects",
@@ -120,6 +121,7 @@ const CourseDetail = (props) => {
                 window.location.href = `/coursedetails/${courseId}`;
               }
               toggle_DBx(false);
+              Main.toggleLoader(false);
             })
             .catch((err) => {
               Main.toggleErrorBox({
