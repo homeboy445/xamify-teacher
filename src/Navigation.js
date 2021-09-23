@@ -13,6 +13,7 @@ import ExamCreator from "./components/ExamCreator/ExamCreator";
 import TeachersPage from "./components/TeachersPage/TeachersPage";
 import CoursePage from "./components/CoursePage/CoursePage";
 import CourseDetail from "./components/CoursePage/CourseDetail";
+import SubmissionPage from "./components/SubmissionPage/SubmissionPage";
 import ErrorBox from "./components/ErrorBox/ErrorBox";
 
 const Navigation = () => {
@@ -49,7 +50,8 @@ const Navigation = () => {
       ) : null}{" "}
       {Main.Auth &&
       Main.ActiveRoute !== "ExamDetails" &&
-      Main.ActiveRoute !== "ExamCreator" ? (
+      Main.ActiveRoute !== "ExamCreator" &&
+      Main.ActiveRoute !== "Submission Page" ? (
         <Menu changeAuth={Main.changeAuth} />
       ) : null}
       <div
@@ -133,6 +135,13 @@ const Navigation = () => {
               ) : (
                 <Redirect to="/signin" />
               );
+            }}
+          />
+          <Route
+            path="/submissionpage/:id"
+            render={(props) => {
+              Main.updateActiveRoute("Submission Page");
+              return Main.Auth ? <SubmissionPage /> : <Redirect to="/signin" />;
             }}
           />
           <Redirect from="*" to="/" />

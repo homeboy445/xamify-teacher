@@ -9,9 +9,14 @@ const ExamDetails = () => {
   const Main = useContext(AuthContext);
   const [subject, set_Subject] = useState("Choose subject");
   const [subjectList, update_List] = useState([]);
+  const [fetchedData, updateStatus] = useState(false);
   const [ExamTakingMode, set_Mode] = useState("Typed");
-  const [startTime, set_Stime] = useState("10:00");
-  const [endTime, set_Etime] = useState("10:45");
+  const [startTime, set_Stime] = useState(
+    `${new Date().getHours()}:${new Date().getMinutes()}`
+  );
+  const [endTime, set_Etime] = useState(
+    `${new Date().getHours() + 1}:${new Date().getMinutes()}`
+  );
 
   const getTodaysDate = (val) => {
     var obj = new Date();
@@ -24,7 +29,7 @@ const ExamDetails = () => {
   const [endDate, set_Edate] = useState(getTodaysDate(0));
 
   useEffect(() => {
-    if (Main.AccessToken !== null) {
+    if (Main.AccessToken !== null && !fetchedData) {
       Main.toggleLoader(true);
       axios
         .get(Main.url + "/subjects", {
@@ -35,10 +40,12 @@ const ExamDetails = () => {
         .then((response) => {
           update_List(response.data);
           set_Subject(response.data[0].name);
+          updateStatus(true);
           Main.toggleLoader(false);
-        }).catch(err=>{
-          Main.RefreshAccessToken();
         })
+        .catch((err) => {
+          Main.RefreshAccessToken();
+        });
     }
   }, [Main]);
 
@@ -57,7 +64,8 @@ const ExamDetails = () => {
 
   const HandleSubmit = () => {
     let dObj = new Date(),
-      dObj1 = new Date();
+      dObj1 = new Date(),
+      mm = new Date();
     let dT = startDate.split("-"),
       cT = startTime.split(":");
     dObj.setFullYear(parseInt(dT[0]), parseInt(dT[1]), parseInt(dT[2]));
@@ -67,6 +75,12 @@ const ExamDetails = () => {
     dObj1.setFullYear(parseInt(dT[0]), parseInt(dT[1]), parseInt(dT[2]));
     dObj1.setHours(parseInt(cT[0]), parseInt(cT[1]));
     let diff = dObj1 - dObj;
+    if (dObj - mm < 0) {
+      return Main.toggleErrorBox({
+        is: true,
+        info: "Please choose a future time or the present time.",
+      });
+    }
     if (diff < 0) {
       return Main.toggleErrorBox({
         is: true,
@@ -79,11 +93,11 @@ const ExamDetails = () => {
       endTime: dObj1.toISOString(),
       subjectId: getSubId(subject),
     };
-    if(
+    if (
       !window.confirm(
         "Are you sure with these credentials as these cannot be edited again and would like to proceed further?"
       )
-    ){
+    ) {
       return;
     }
     axios

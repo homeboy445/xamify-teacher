@@ -24,6 +24,7 @@ const ExamCreator = (props) => {
   const [ExamDetails, update_Details] = useState([]);
   const [questions, set_questions] = useState([]);
   const [instructions, set_instructions] = useState("");
+  const [fetchedData, updateStatus] = useState(false);
 
   const [DeleteQBox, ToggleDelQBx] = useState({
     is: false,
@@ -54,7 +55,7 @@ const ExamCreator = (props) => {
   };
 
   useEffect(() => {
-    if (Main.AccessToken !== null && questions.length === 0) {
+    if (Main.AccessToken !== null && !fetchedData) {
       Main.toggleLoader(true);
       axios
         .get(Main.url + `/assessments/${ExamId}`, {
@@ -69,14 +70,19 @@ const ExamCreator = (props) => {
               info: "Editing is not supported yet. Redirecting to dashboard...",
             });
             setTimeout(() => (window.location.href = "/dashboard"), 10000);
-            Main.toggleLoader(false);
             return;
           }
+          Main.toggleLoader(false);
           update_Details(response.data);
+          updateStatus(true);
+          window.onbeforeunload = ()=>'';
         })
         .catch((e) => {
           Main.RefreshAccessToken();
         });
+        return ()=>{
+          window.onbeforeunload = null;
+        }
     }
     let idx = AddProblemBoxOpen.editor;
     if (idx !== -1) {
