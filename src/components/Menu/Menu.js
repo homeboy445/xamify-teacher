@@ -2,7 +2,6 @@ import React, { useEffect, useContext } from "react";
 import "./Menu.css";
 import { Link } from "react-router-dom";
 import AuthContext from "../../Context";
-import Cookie from "js-cookie";
 import Dashboard_Icon from "../../assets/icons/dashboard.svg";
 import Student_Icon from "../../assets/icons/student.svg";
 import Teacher_Icon from "../../assets/icons/teacher.svg";
@@ -90,9 +89,7 @@ const Menu = ({ changeAuth }) => {
       <h1
         className="SignOut"
         onClick={() => {
-          Cookie.set("teacher", undefined);
-          Cookie.set("refresh", undefined);
-          changeAuth(false);
+          sessionStorage.clear();
           window.location.href = "/signin";
         }}
       >

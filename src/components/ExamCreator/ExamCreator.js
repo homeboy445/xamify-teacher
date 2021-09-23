@@ -75,14 +75,14 @@ const ExamCreator = (props) => {
           Main.toggleLoader(false);
           update_Details(response.data);
           updateStatus(true);
-          window.onbeforeunload = ()=>'';
+          window.onbeforeunload = () => "";
         })
         .catch((e) => {
           Main.RefreshAccessToken();
         });
-        return ()=>{
-          window.onbeforeunload = null;
-        }
+      return () => {
+        window.onbeforeunload = null;
+      };
     }
     let idx = AddProblemBoxOpen.editor;
     if (idx !== -1) {
@@ -277,6 +277,10 @@ const ExamCreator = (props) => {
                 }
               }
               set_questions(qObj);
+              change_choice1("");
+              change_choice2("");
+              change_choice3("");
+              change_choice4("");
               ToggleAddPrBox({ is: false, editor: -1 });
             }}
           >
@@ -368,6 +372,7 @@ const ExamCreator = (props) => {
               className="pblsh"
               onClick={() => {
                 let qq = questions;
+                console.log(qq);
                 axios
                   .post(
                     Main.url + `/assessments/${ExamId}`,

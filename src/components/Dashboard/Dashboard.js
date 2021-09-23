@@ -8,6 +8,7 @@ const Dashboard = () => {
   const Main = useContext(AuthContext);
   const [AssessmentGrouped, update_group] = useState([]);
   const [AllAssessment, update_Details] = useState([]);
+  const [fetchedData, updateStatus] = useState(false);
   const [Show_Active, set_SActive] = useState(true);
   const [Show_Upcoming, set_SUpcoming] = useState(true);
   const [Show_Previous, set_PAttempted] = useState(true);
@@ -31,11 +32,7 @@ const Dashboard = () => {
   };
 
   useEffect(() => {
-    if (
-      Main.AccessToken !== null &&
-      !Main.isError.is &&
-      AssessmentGrouped.length === 0
-    ) {
+    if (Main.AccessToken !== null && !Main.isError.is && !fetchedData) {
       Main.toggleLoader(true);
       axios
         .get(Main.url + "/assessments", {
@@ -69,6 +66,7 @@ const Dashboard = () => {
           });
           update_Details(response.data);
           update_group(obj);
+          updateStatus(true);
           Main.toggleLoader(false);
         })
         .catch((err) => {
@@ -181,7 +179,7 @@ const Dashboard = () => {
                 }}
               >
                 <h2>{item.active.subject.name}</h2>
-                <button style={{alignSelf: "center"}}>Info</button>
+                <button style={{ alignSelf: "center" }}>Info</button>
               </div>
             );
           })}
@@ -272,14 +270,16 @@ const Dashboard = () => {
                 }}
               >
                 <h2>{item.previous.subject.name}</h2>
-                <p onClick={
-                  ()=>{
+                <p
+                  onClick={() => {
                     let obj = AllAssessment.find(
                       (item1) => item1.id === item.previous.id
                     );
                     toggleDetailBox({ is: true, object: obj });
-                  }
-                }>Details</p>
+                  }}
+                >
+                  Details
+                </p>
               </div>
             );
           })}

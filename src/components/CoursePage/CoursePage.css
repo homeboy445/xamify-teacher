@@ -5,6 +5,9 @@
   align-items: left;
   width: 100%;
 }
+.s-title{
+  width: 60%;
+}
 .yrs_subj > div {
   display: flex;
   flex-direction: column;
