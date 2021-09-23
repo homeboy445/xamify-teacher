@@ -23,9 +23,9 @@ const Card = ({ image, Name, Creds, type, callBack, removeCallback }) => {
         <div
           className="crd_1"
           style={{
-            opacity: Main.userInfo !== "admin@xamify.com" ? 0 : 1,
+            opacity: Main.userInfo.email !== "admin@xamify.com" ? 0 : 1,
             pointerEvents:
-              Main.userInfo !== "admin@xamify.com" ? "none" : "all",
+              Main.userInfo.email !== "admin@xamify.com" ? "none" : "all",
           }}
         >
           <h3 onClick={callBack}>edit</h3>

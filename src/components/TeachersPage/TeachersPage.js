@@ -93,9 +93,9 @@ const TeachersPage = () => {
             toggle_DBx(!DetailBox);
           }}
           style={{
-            opacity: Main.userInfo !== "admin@xamify.com" ? 0 : 1,
+            opacity: Main.userInfo.email !== "admin@xamify.com" ? 0 : 1,
             pointerEvents:
-              Main.userInfo !== "admin@xamify.com" ? "none" : "all",
+              Main.userInfo.email !== "admin@xamify.com" ? "none" : "all",
           }}
         >
           Add Teacher +{" "}

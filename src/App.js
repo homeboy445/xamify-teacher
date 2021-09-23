@@ -11,7 +11,7 @@ const isCookieAlive = () => {
 const App = () => {
   const [Auth, changeAuth] = useState(isCookieAlive());
   const [AccessToken, update_Token] = useState(null);
-  const [userInfo, update_Info] = useState({});
+  const [userInfo, update_Info] = useState({email:''});
   const [ActiveRoute, update_ActiveRoute] = useState("Home");
   const [loading, toggleLoader] = useState(false);
   const [isError, toggleErrorStatus] = useState({
