@@ -132,7 +132,14 @@ const Dashboard = () => {
         }}
       >
         <h1 className="d-title">Dashboard</h1>
-        <button onClick={() => (window.location.href = "/examdetails")}>
+        <button
+          onClick={() => (window.location.href = "/examdetails")}
+          style={{
+            opacity: Main.userInfo !== "admin@xamify.com" ? 0 : 1,
+            pointerEvents:
+              Main.userInfo !== "admin@xamify.com" ? "none" : "all",
+          }}
+        >
           Create Tests +
         </button>
       </div>

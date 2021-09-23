@@ -372,7 +372,7 @@ const ExamCreator = (props) => {
               className="pblsh"
               onClick={() => {
                 let qq = questions;
-                console.log(qq);
+                qq.instructions = instructions;
                 axios
                   .post(
                     Main.url + `/assessments/${ExamId}`,

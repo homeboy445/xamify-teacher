@@ -143,6 +143,11 @@ const CourseDetail = (props) => {
           onClick={() => {
             toggle_DBx(!DetailBox);
           }}
+          style={{
+            opacity: Main.userInfo !== "admin@xamify.com" ? 0 : 1,
+            pointerEvents:
+              Main.userInfo !== "admin@xamify.com" ? "none" : "all",
+          }}
         >
           Add Subject +
         </button>
@@ -160,7 +165,7 @@ const CourseDetail = (props) => {
                     {(item.subjects || []).length > 0
                       ? (item.subjects || ["No Subject Associated"]).map(
                           (item, index) => {
-                            let idx = getRandomArbitrary(0, colorData.length),
+                            let idx = index,
                               N = colorData.length;
                             return (
                               <p

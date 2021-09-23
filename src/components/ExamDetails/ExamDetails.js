@@ -6,16 +6,24 @@ import Dropdown from "../sub_components/Dropdown/Dropdown";
 import Arrow from "../../assets/Images/right-arrow.png";
 
 const ExamDetails = () => {
+  const getCurHour = (val) => {
+    let n = new Date().getHours() + val;
+    return n < 10 ? "0" + n : n;
+  };
+
+  const getCurMinutes = () => {
+    let n = new Date().getMinutes();
+    return n < 10 ? "0" + n : n;
+  };
+
   const Main = useContext(AuthContext);
   const [subject, set_Subject] = useState("Choose subject");
   const [subjectList, update_List] = useState([]);
   const [fetchedData, updateStatus] = useState(false);
   const [ExamTakingMode, set_Mode] = useState("Typed");
-  const [startTime, set_Stime] = useState(
-    `${new Date().getHours()}:${new Date().getMinutes()}`
-  );
+  const [startTime, set_Stime] = useState(`${getCurHour(0)}:${getCurMinutes()}`);
   const [endTime, set_Etime] = useState(
-    `${new Date().getHours() + 1}:${new Date().getMinutes()}`
+    `${getCurHour(1)}:${getCurMinutes()}`
   );
 
   const getTodaysDate = (val) => {
@@ -88,7 +96,7 @@ const ExamDetails = () => {
       });
     }
     const ExamObject = {
-      type: ExamTakingMode === "Typed" ? "DIGITAL" : "IMAGE",
+      type: ExamTakingMode === "Typed" ? "DIGITAL" : "WRITTEN",
       startTime: dObj.toISOString(),
       endTime: dObj1.toISOString(),
       subjectId: getSubId(subject),

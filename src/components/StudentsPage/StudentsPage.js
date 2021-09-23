@@ -52,7 +52,6 @@ const StudentsPage = () => {
           toggle_DBx(false);
         }}
         onSubmitCallback={(student, url) => {
-          // console.log(student);
           axios
             .post(
               Main.url + url,
@@ -62,12 +61,8 @@ const StudentsPage = () => {
               }
             )
             .then((response) => {
-              let ss = students;
-              response.data.map(item=>{
-                return ss.push(item);
-              });
-              set_students(ss);
               toggle_DBx(false);
+              window.location.href="/studentpage";
             })
             .catch((err) => {
               console.log(err);
@@ -90,6 +85,10 @@ const StudentsPage = () => {
         <button
           onClick={() => {
             toggle_DBx(!DetailBox);
+          }}
+          style={{
+            opacity: Main.userInfo !== "admin@xamify.com"?0:1,
+            pointerEvents: Main.userInfo !== "admin@xamify.com"?"none":"all"
           }}
         >
           Add Student +{" "}

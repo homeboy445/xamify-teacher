@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useContext } from "react";
+import AuthContext from "../../../Context";
 import "./Card.css";
 
 const Card = ({ image, Name, Creds, type, callBack, removeCallback }) => {
+  const Main = useContext(AuthContext);
   type = typeof type === undefined ? "all" : "course";
   callBack = typeof callBack === undefined ? () => {} : callBack;
   removeCallback =
@@ -18,7 +20,14 @@ const Card = ({ image, Name, Creds, type, callBack, removeCallback }) => {
         {Creds.map((item, index) => {
           return <h3 key={index}>{item}</h3>;
         })}
-        <div className="crd_1">
+        <div
+          className="crd_1"
+          style={{
+            opacity: Main.userInfo !== "admin@xamify.com" ? 0 : 1,
+            pointerEvents:
+              Main.userInfo !== "admin@xamify.com" ? "none" : "all",
+          }}
+        >
           <h3 onClick={callBack}>edit</h3>
           <h3 onClick={removeCallback}>remove</h3>
         </div>

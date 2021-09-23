@@ -92,6 +92,11 @@ const TeachersPage = () => {
           onClick={() => {
             toggle_DBx(!DetailBox);
           }}
+          style={{
+            opacity: Main.userInfo !== "admin@xamify.com" ? 0 : 1,
+            pointerEvents:
+              Main.userInfo !== "admin@xamify.com" ? "none" : "all",
+          }}
         >
           Add Teacher +{" "}
         </button>
