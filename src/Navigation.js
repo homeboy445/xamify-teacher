@@ -6,7 +6,6 @@ import SignIn from "./components/SignIn/SignIn";
 import Menu from "./components/Menu/Menu";
 import Dashboard from "./components/Dashboard/Dashboard";
 import StudentsPage from "./components/StudentsPage/StudentsPage";
-import Cookie from "js-cookie";
 import ExamDetails from "./components/ExamDetails/ExamDetails";
 import ExamCreator from "./components/ExamCreator/ExamCreator";
 import TeachersPage from "./components/TeachersPage/TeachersPage";
@@ -20,8 +19,8 @@ const Navigation = () => {
 
   const HandleAuth = (token, rtoken) => {
     if (token !== undefined && token.length !== 0) {
-      Cookie.set("teacher", token);
-      Cookie.set("refresh", `${rtoken}|${new Date().toISOString()}`);
+      sessionStorage.setItem("teacher", token);
+      sessionStorage.setItem("refresher", `${rtoken}|${new Date().toISOString()}`);
       Main.changeAuth(true);
       window.location.href = "/dashboard";
     }

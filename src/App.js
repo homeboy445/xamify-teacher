@@ -2,14 +2,10 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import AuthContext from "./Context";
 import axios from "axios";
-import Cookie from "js-cookie";
 import Navigation from "./Navigation";
 
 const isCookieAlive = () => {
-  return (
-    typeof Cookie.get("teacher") !== undefined &&
-    Cookie.get("teacher") !== "undefined"
-  );
+  return sessionStorage.getItem("teacher") !== null;
 };
 
 const App = () => {
@@ -24,11 +20,15 @@ const App = () => {
   const url = "https://xamify.herokuapp.com/api";
 
   const RefreshAccessToken = () => {
-    let refCookie = Cookie.get("refresh");
-    if (refCookie === "undefined" || typeof refreshCookie === undefined) {
+    let refCookie = sessionStorage.getItem("refresher");
+    if (refCookie === null) {
       return;
     }
-    refCookie = refCookie.split("|");
+    try {
+      refCookie = refCookie.split("|");
+    } catch {
+      return changeAuth(false);
+    }
     let refreshToken = refCookie[0],
       t1 = new Date(),
       t2 = new Date(refCookie[1]);
@@ -44,14 +44,14 @@ const App = () => {
         if (!Auth) {
           return;
         }
-        Cookie.set("teacher", response.data.accessToken);
-        Cookie.set("refresh", response.data.refreshToken);
+        sessionStorage.setItem("teacher", response.data.accessToken);
+        sessionStorage.setItem("refresher", response.data.refreshToken);
         update_Token(`Bearer ${response.data.accessToken}`);
       });
   };
 
   useEffect(() => {
-    let cookieValue = Cookie.get("teacher");
+    let cookieValue = sessionStorage.getItem("teacher");
     if (isCookieAlive()) {
       update_Token(`Bearer ${cookieValue}`);
       if (!Auth) {
@@ -64,7 +64,7 @@ const App = () => {
         .then((response) => {
           if (response.data.type === "STUDENT") {
             changeAuth(false);
-            Cookie.set("teacher", undefined);
+            sessionStorage.setItem("teacher", null);
             return;
           }
           update_Info(response.data);
