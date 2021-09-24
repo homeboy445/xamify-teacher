@@ -1,6 +1,11 @@
-<h1>Xamify-teacher: An ultimate exam creator and student manager for teachers and also the handling body of Xamify</h1>
-<h2>Now, it's super easy for the teachers to create the exams and manage students easily</h2>
-<br/>
+<h2 align="center"><b><a href="https://xamify-teacher.vercel.app/">XAMFIY TEACHER'S DASHBOARD</a></b></h2>
+
+<h4 align="center">An ultimate exam creator and student manager for teachers and also the handling body of Xamify</h4>
+<h2 align="center">Now, it's super easy for the teachers to create the exams and manage students easily</h2>
+
+<br>
+<hr>
+<br>
 
 <h2>Features</h2>
 <h3>✔ Manage the data of every student easily - create, edit or delete a student record at your finger tips[Admin feature only].</h3>
@@ -9,6 +14,13 @@
 <h3>✔ Create assessments easily thanks to the specially designed test creator for teachers</h3>
 <h3>✔ Download test results of any student anytime in pdf format</h3>
 <br/>
+
+ <h2>Links to some associated repos</h2>
+  <h3><a href="https://github.com/homeboy445/xamify">Xamify</a></h3>
+    <h3><a href="https://xamify.herokuapp.com/api">Backend API</a></h3>
+    <h3><a href="https://github.com/ujjawal-shrivastava/xamify-pdf-generator">PDF generator</a></h3>
+<br/>
+
 
 <h2>Some ScreenShots</h2>
 <img src="https://user-images.githubusercontent.com/61937872/134608647-00544aaa-3289-4963-a1bf-1de3723f5973.png" alt="" />
