@@ -138,10 +138,14 @@ const Navigation = () => {
             }}
           />
           <Route
-            path="/submissionpage/:id"
+            path="/submissions/:id"
             render={(props) => {
               Main.updateActiveRoute("Submission Page");
-              return Main.Auth ? <SubmissionPage {...props}/> : <Redirect to="/signin" />;
+              return Main.Auth ? (
+                <SubmissionPage {...props} />
+              ) : (
+                <Redirect to="/signin" />
+              );
             }}
           />
           <Redirect from="*" to="/" />
