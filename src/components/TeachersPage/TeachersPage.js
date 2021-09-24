@@ -73,6 +73,7 @@ const TeachersPage = () => {
             )
             .then((response) => {
               toggle_DBx(false);
+              window.location.href="/teacherpage";
               return;
             })
             .catch((err) => {
