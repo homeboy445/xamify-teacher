@@ -1,4 +1,4 @@
-<h2 align="center"><b><a href="https://xamify-teacher.vercel.app/">XAMFIY TEACHER'S DASHBOARD</a></b></h2>
+<h2 align="center"><b><a href="https://xamify-teacher.vercel.app/">XAMIFY TEACHER'S DASHBOARD</a></b></h2>
 
 <h4 align="center">An ultimate exam creator and student manager for teachers and also the handling body of Xamify</h4>
 <h2 align="center">Now, it's super easy for the teachers to create the exams and manage students easily</h2>
