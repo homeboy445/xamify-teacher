@@ -3,6 +3,7 @@ import "./Dashboard.css";
 import AuthContext from "../../Context";
 import axios from "axios";
 import Arrow_Down from "../../assets/Images/arrow-down(white).png";
+import { Link } from "react-router-dom";
 
 const Dashboard = () => {
   const Main = useContext(AuthContext);
@@ -86,25 +87,29 @@ const Dashboard = () => {
           opacity: DetailBox.is ? 1 : 0,
         }}
       >
-        <h1>Exam Details</h1>
+        <h1> Exam Details </h1>{" "}
         {AssessmentGrouped.length > 0 ? (
           <div>
             <h2>
               Date of the Exam:{" "}
-              <span>{new Date(DetailBox.object.startTime).toDateString()}</span>
-            </h2>
+              <span>
+                {`${new Date(DetailBox.object.startTime).toDateString()} (${new Date(DetailBox.object.startTime).toLocaleTimeString()})`}{" "}
+              </span>{" "}
+            </h2>{" "}
             <h2>
-              Duration of the Exam: <span>{getDuration(DetailBox.object)}</span>
-            </h2>
+              Duration of the Exam:{" "}
+              <span> {getDuration(DetailBox.object)} </span>{" "}
+            </h2>{" "}
             <h2>
-              Subject of the Exam: <span>{DetailBox.object.subject.name}</span>
-            </h2>
+              Subject of the Exam:{" "}
+              <span> {DetailBox.object.subject.name} </span>{" "}
+            </h2>{" "}
             <h2>
               For students of year:{" "}
-              <span>{DetailBox.object.subject.year.label}</span>
-            </h2>
+              <span> {DetailBox.object.subject.year.label} </span>{" "}
+            </h2>{" "}
           </div>
-        ) : null}
+        ) : null}{" "}
         <button
           className="dtl_btn"
           onClick={() => {
@@ -121,9 +126,9 @@ const Dashboard = () => {
             });
           }}
         >
-          Ok
-        </button>
-      </div>
+          Ok{" "}
+        </button>{" "}
+      </div>{" "}
       <div
         className="db-titl"
         style={{
@@ -131,11 +136,11 @@ const Dashboard = () => {
           pointerEvents: DetailBox.is ? "none" : "all",
         }}
       >
-        <h1 className="d-title">Dashboard</h1>
+        <h1 className="d-title"> Dashboard </h1>{" "}
         <button onClick={() => (window.location.href = "/examdetails")}>
           Create Tests +
-        </button>
-      </div>
+        </button>{" "}
+      </div>{" "}
       <div
         className="dashboard-1"
         style={{
@@ -150,7 +155,7 @@ const Dashboard = () => {
               set_SActive(!Show_Active);
             }}
           >
-            <h1>Active Tests</h1>
+            <h1> Active Tests </h1>{" "}
             <img
               src={Arrow_Down}
               alt="\/"
@@ -158,8 +163,8 @@ const Dashboard = () => {
                 transform: Show_Active ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "0.1s ease",
               }}
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           {AssessmentGrouped.map((item, index) => {
             if (!("active" in item)) {
               return null;
@@ -178,12 +183,30 @@ const Dashboard = () => {
                   backgroundColor: !Show_Active ? "transparent" : "#cde4f6",
                 }}
               >
-                <h2>{item.active.subject.name}</h2>
-                <button style={{ alignSelf: "center" }}>Info</button>
+                <h2> {item.active.subject.name} </h2>{" "}
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
+                <p
+                  onClick={() => {
+                    let obj = AllAssessment.find(
+                      (item1) => item1.id === item.active.id
+                    );
+                    toggleDetailBox({ is: true, object: obj });
+                  }}
+
+                  style={{marginRight:"1rem", color:"darkblue", fontWeight:"bolder"}}
+                >
+                  Info
+                </p>
+                <Link to={`/submissions/${item.active.id}`} style={{ textDecoration: 'none' }}>
+                <p
+                  style={{marginRight:"0.5rem", color:"darkgreen",fontWeight:"bolder"}}
+                >
+                  Submissions{" "}
+                </p></Link>{" "}</div>
               </div>
             );
-          })}
-        </div>
+          })}{" "}
+        </div>{" "}
         <div className="Upcoming">
           <div
             className="Upcoming_1"
@@ -191,7 +214,7 @@ const Dashboard = () => {
               set_SUpcoming(!Show_Upcoming);
             }}
           >
-            <h1>Upcoming Tests</h1>
+            <h1> Upcoming Tests </h1>{" "}
             <img
               src={Arrow_Down}
               alt="\/"
@@ -199,8 +222,8 @@ const Dashboard = () => {
                 transform: Show_Upcoming ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "0.1s ease",
               }}
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           {AssessmentGrouped.map((item, index) => {
             if (!("upcoming" in item)) {
               return null;
@@ -219,7 +242,7 @@ const Dashboard = () => {
                   backgroundColor: !Show_Upcoming ? "transparent" : "#cde4f6",
                 }}
               >
-                <h2>{item.upcoming.subject.name}</h2>
+                <h2> {item.upcoming.subject.name} </h2>{" "}
                 <p
                   onClick={() => {
                     let obj = AllAssessment.find(
@@ -228,12 +251,12 @@ const Dashboard = () => {
                     toggleDetailBox({ is: true, object: obj });
                   }}
                 >
-                  Details
-                </p>
+                  Details{" "}
+                </p>{" "}
               </div>
             );
-          })}
-        </div>
+          })}{" "}
+        </div>{" "}
         <div className="Attempted">
           <div
             className="Attempted_1"
@@ -241,7 +264,7 @@ const Dashboard = () => {
               set_PAttempted(!Show_Previous);
             }}
           >
-            <h1>Previously hosted tests</h1>
+            <h1> Previously hosted tests </h1>{" "}
             <img
               src={Arrow_Down}
               alt="\/"
@@ -249,8 +272,8 @@ const Dashboard = () => {
                 transform: Show_Previous ? "rotate(180deg)" : "rotate(0deg)",
                 transition: "0.1s ease",
               }}
-            />
-          </div>
+            />{" "}
+          </div>{" "}
           {AssessmentGrouped.map((item, index) => {
             if (!("previous" in item)) {
               return null;
@@ -269,7 +292,8 @@ const Dashboard = () => {
                   backgroundColor: !Show_Previous ? "transparent" : "#cde4f6",
                 }}
               >
-                <h2>{item.previous.subject.name}</h2>
+                <h2> {item.previous.subject.name} </h2>{" "}
+                <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
                 <p
                   onClick={() => {
                     let obj = AllAssessment.find(
@@ -277,14 +301,22 @@ const Dashboard = () => {
                     );
                     toggleDetailBox({ is: true, object: obj });
                   }}
+
+                  style={{marginRight:"1rem", color:"darkblue", fontWeight:"bolder"}}
                 >
                   Details
                 </p>
+                <Link to={`/submissions/${item.previous.id}`} style={{ textDecoration: 'none' }}>
+                <p
+                  style={{marginRight:"0.5rem", color:"darkgreen",fontWeight:"bolder"}}
+                >
+                  Submissions{" "}
+                </p></Link>{" "}</div>
               </div>
             );
-          })}
-        </div>
-      </div>
+          })}{" "}
+        </div>{" "}
+      </div>{" "}
     </div>
   );
 };
