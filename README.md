@@ -31,4 +31,8 @@
 <img src="https://user-images.githubusercontent.com/61937872/134608680-fd3b6b18-b488-46bc-8e02-1b979c769364.png" alt="" />
 <br/>
 
+<h2>Login Credentials</h2>
+<h4>email: admin@xamify.com</h4>
+<h4>password: zLnNe7tYh^uvH#Qi</h4>
+<br />
 <h1>Please report any issue if present, Thanks!</h1>
