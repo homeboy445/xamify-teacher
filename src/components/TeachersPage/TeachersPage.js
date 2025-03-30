@@ -130,10 +130,10 @@ const TeachersPage = () => {
               return (
                 <Card
                   key={index}
-                  image={`https://avatars.dicebear.com/api/initials/${item.name}.svg`}
+                  image={Main.getTeacherImageUrl(item.name)}
                   Name={item.name}
                   Subjects={[]}
-                  Creds={[item.course, item.year]}
+                  Creds={[]}
                 />
               );
             })

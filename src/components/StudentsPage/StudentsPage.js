@@ -53,16 +53,12 @@ const StudentsPage = () => {
         }}
         onSubmitCallback={(student, url) => {
           axios
-            .post(
-              Main.url + url,
-              student,
-              {
-                headers: { Authorization: Main.AccessToken },
-              }
-            )
+            .post(Main.url + url, student, {
+              headers: { Authorization: Main.AccessToken },
+            })
             .then((response) => {
               toggle_DBx(false);
-              window.location.href="/studentpage";
+              window.location.href = "/studentpage";
             })
             .catch((err) => {
               console.log(err);
@@ -87,8 +83,9 @@ const StudentsPage = () => {
             toggle_DBx(!DetailBox);
           }}
           style={{
-            opacity: Main.userInfo.email !== "admin@xamify.com"?0:1,
-            pointerEvents: Main.userInfo.email !== "admin@xamify.com"?"none":"all"
+            opacity: Main.userInfo.email !== "admin@xamify.com" ? 0 : 1,
+            pointerEvents:
+              Main.userInfo.email !== "admin@xamify.com" ? "none" : "all",
           }}
         >
           Add Student +{" "}
@@ -117,9 +114,9 @@ const StudentsPage = () => {
               return (
                 <Card
                   key={index}
-                  image={`https://avatars.dicebear.com/api/human/${index}.svg`}
+                  image={Main.getStudentImageUrl(item.name)}
                   Name={item.name}
-                  Creds={[item.profile.course.name, item.profile.year.label]}
+                  Creds={[item.profile.course.name, `${item.profile.year.label} Yr`]} 
                   Subjects={[]}
                 />
               );

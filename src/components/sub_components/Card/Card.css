@@ -1,4 +1,15 @@
-.prof-card {
+
+
+.card-wrapper {
+  display: flex;
+  flex-direction: column;
+  /* border: 2px solid; */
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+/* .prof-card {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -19,17 +30,17 @@
   width: 100%;
   border-radius: 5px;
   margin-left: 4%;
-  background: #fffc00; /* fallback for old browsers */
+  background: #fffc00;
   background: -webkit-linear-gradient(
     to right,
     #ffffff,
     #fffc00
-  ); /* Chrome 10-25, Safari 5.1-6 */
+  );
   background: linear-gradient(
     to right,
     #ffffff,
     #fffc00
-  ); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+  );
 }
 .pf_1 {
   display: flex;
@@ -95,6 +106,4 @@
   border-radius: 4px;
   cursor:pointer;
   padding: 2%;
-}
-
-
+} */

@@ -10,7 +10,7 @@ const SignIn = ({ HandleAuth }) => {
   const HandleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("https://xamify.herokuapp.com/api/auth/login", {
+      .post("http://localhost:8000/api/auth/login", {
         email: email,
         password: password,
       })

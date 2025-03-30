@@ -18,7 +18,7 @@ const App = () => {
     is: false,
     info: "Testing...",
   });
-  const url = "https://xamify.herokuapp.com/api";
+  const url = "http://localhost:8000/api";
 
   const RefreshAccessToken = () => {
     let refCookie = sessionStorage.getItem("refresher");
@@ -28,6 +28,7 @@ const App = () => {
     try {
       refCookie = refCookie.split("|");
     } catch {
+      sessionStorage.removeItem("refresher");
       return changeAuth(false);
     }
     let refreshToken = refCookie[0],
@@ -46,8 +47,13 @@ const App = () => {
           return;
         }
         sessionStorage.setItem("teacher", response.data.accessToken);
-        sessionStorage.setItem("refresher", response.data.refreshToken);
+        // sessionStorage.setItem("refresher", response.data.refreshToken);
         update_Token(`Bearer ${response.data.accessToken}`);
+      })
+      .catch(() => {
+        sessionStorage.removeItem("teacher");
+        sessionStorage.removeItem("refresher");
+        changeAuth(false);
       });
   };
 
@@ -107,6 +113,15 @@ const App = () => {
             }, 10000);
           }
         },
+        getStudentImageUrl: (studentName) => {
+          return `https://api.dicebear.com/9.x/notionists/svg?seed=${studentName || "Vivian"}`;
+        },
+        getTeacherImageUrl: (teacherName) => {
+          return `https://api.dicebear.com/9.x/initials/svg?seed=${teacherName || "Vivian"}`;
+        },
+        getCourseImageUrl: (courseName) => {
+          return `https://api.dicebear.com/9.x/shapes/svg?seed=${courseName || "Vivian"}`;
+        }
       }}
     >
       <Router>
