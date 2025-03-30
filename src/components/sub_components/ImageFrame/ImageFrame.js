@@ -2,16 +2,7 @@ import React from 'react';
 
 const ImageFrame = ({image}) => {
     return (
-        <div style={{
-            width:"7%",
-            padding:"2%",
-            borderRadius: "100%",
-            backgroundColor:"yellow",
-            border:"2px solid green",
-            display:"flex",
-            justifyContent:"center",
-            alignItems:"center"
-        }}>
+        <div className="image-frame">
             <img src={image} alt="" style={{
                 marginLeft:"1%"
             }}/>

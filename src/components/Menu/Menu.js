@@ -17,7 +17,6 @@ const Menu = ({ changeAuth }) => {
     <div className="menu">
       <h1 className="title">Xamify</h1>
       <div className="menu-1">
-        <ImageFrame image={Dashboard_Icon} />
         <h2>{Main.userInfo.name || "Admin User"}</h2>
       </div>
       <div className="menu-2">
