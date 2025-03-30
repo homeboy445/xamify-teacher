@@ -163,3 +163,101 @@
 }
 
 
+/* NEW SECTION */
+
+.exam-flow-main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-primary-color);
+  overflow: hidden;
+}
+
+.exam-flow-navigator {
+  position: fixed;
+  top: 3%;
+  left: 2%;
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.exam-flow, .choose-subject, .choose-exam-mode {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  min-height: 50vh;
+}
+
+.exam-flow > h1 {
+  font-size: 4rem;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.exam-flow > h2 {
+  font-weight: 400;
+  width: 70%;
+  line-height: 40px;
+  margin-bottom: 5%;
+}
+
+.choose-subject, .choose-exam-mode {
+  justify-content: center;
+  align-items: center;
+}
+
+.choose-subject > h2, .choose-exam-mode > h2, .choose-date-time > h2 {
+  color: var(--primary-color);
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+.dropdown-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 5%;
+}
+
+.choose-subject > button, .choose-exam-mode > button {
+  margin-top: 5%;
+}
+
+.choose-date-time {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  min-height: 50vh;
+  width: 100%;
+}
+
+.date-time-picker {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: flex-start;
+  width: 100%;
+  margin-left: 10%;
+  margin-top: -5%;
+}
+
+.date-time-picker > .date-picker, .date-time-picker > .time-picker {
+  display: flex;
+  flex-direction: column;
+  justify-content: left;
+  align-items: flex-start;
+  width: 50%;
+  margin-top: 5%;
+}
+
+.date-time-picker > .date-picker > h3, .date-time-picker > .time-picker > h3 {
+  font-size: 2rem;
+  font-weight: 400;
+  margin-bottom: 2%;
+  color: var(--primary-color);
+  font-family: 'Montserrat', sans-serif;
+}

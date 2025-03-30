@@ -1,9 +1,24 @@
 import React, { useState, useEffect, useContext } from "react";
-import "./ExamDetails.css";
+import Dropdown from "../sub_components/Dropdown/Dropdown";
 import AuthContext from "../../Context";
 import axios from "axios";
-import Dropdown from "../sub_components/Dropdown/Dropdown";
-import Arrow from "../../assets/Images/right-arrow.png";
+import "./ExamDetails.css";
+import { Button } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import HomeIcon from "@mui/icons-material/Home";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { StaticDatePicker } from "@mui/x-date-pickers/StaticDatePicker";
+import { StaticTimePicker } from "@mui/x-date-pickers/StaticTimePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import Backdrop from "@mui/material/Backdrop";
+import CircularProgress from "@mui/material/CircularProgress";
+
+const EXAM_CREATION_PHASE = {
+  INTRO: 0,
+  CHOOSE_SUBJECT: 1,
+  CHOOSE_MODE: 2,
+  CHOOSE_DATE_TIME: 3,
+};
 
 const ExamDetails = () => {
   const getCurHour = (val) => {
@@ -17,14 +32,16 @@ const ExamDetails = () => {
   };
 
   const Main = useContext(AuthContext);
-  const [subject, set_Subject] = useState("Choose subject");
+  const [examCreationPhase, setExamCreationPhase] = useState(
+    EXAM_CREATION_PHASE.INTRO
+  );
+  const [subject, set_Subject] = useState("");
   const [subjectList, update_List] = useState([]);
   const [fetchedData, updateStatus] = useState(false);
-  const [ExamTakingMode, set_Mode] = useState("Typed");
-  const [startTime, set_Stime] = useState(`${getCurHour(0)}:${getCurMinutes()}`);
-  const [endTime, set_Etime] = useState(
-    `${getCurHour(1)}:${getCurMinutes()}`
-  );
+  const [ExamTakingMode, set_Mode] = useState("");
+  const [startTime, set_Stime] = useState("");
+  const [endTime, set_Etime] = useState("");
+  const [showBackdrop, toggleBackdrop] = useState(false);
 
   const getTodaysDate = (val) => {
     var obj = new Date();
@@ -47,7 +64,6 @@ const ExamDetails = () => {
         })
         .then((response) => {
           update_List(response.data);
-          set_Subject(response.data[0].name);
           updateStatus(true);
           Main.toggleLoader(false);
         })
@@ -126,36 +142,234 @@ const ExamDetails = () => {
       });
   };
 
+  const callSetStateWithBackdrop = (callback) => {
+    toggleBackdrop(true);
+    setTimeout(() => {
+      callback();
+      toggleBackdrop(false);
+    }, 500);
+  };
+
+  const ChooseSubjectComponent = ({
+    subjectList,
+    selectedSubject,
+    updateSelectedSubject,
+  }) => {
+    const [errorStore, setError] = useState({
+      state: false,
+      message: "",
+    });
+    return (
+      <div className="choose-subject">
+        <h2>Choose Subject for Examination</h2>
+        <Dropdown
+          label={"Choose Subject"}
+          itemList={subjectList}
+          valueHandler={[
+            selectedSubject,
+            (val) => {
+              updateSelectedSubject(val[0]);
+            },
+          ]}
+          errorHandler={errorStore}
+        />
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => {
+            if (selectedSubject.trim()) {
+              callSetStateWithBackdrop(() =>
+                setExamCreationPhase(EXAM_CREATION_PHASE.CHOOSE_MODE)
+              );
+            } else {
+              setError({
+                state: true,
+                message: "Please select a subject",
+              });
+            }
+          }}
+        >
+          Proceed
+        </Button>
+      </div>
+    );
+  };
+
+  const ChooseExamModeComponent = ({ examMode, updateExamMode }) => {
+    const [errorStore, setError] = useState({
+      state: false,
+      message: "",
+    });
+    return (
+      <div className="choose-exam-mode">
+        <h2>Choose Exam Mode</h2>
+        <Dropdown
+          label={"Mode of Exam"}
+          itemList={["Typed", "Hand Written(via image upload)"]}
+          valueHandler={[examMode, (val) => updateExamMode(val[0])]} // Update the exam mode state
+          errorHandler={errorStore}
+        />
+        <Button
+          variant="contained"
+          color="success"
+          onClick={() => {
+            console.log("EXAM MODE: ", examMode);
+            if (examMode.trim()) {
+              callSetStateWithBackdrop(() =>
+                setExamCreationPhase(EXAM_CREATION_PHASE.CHOOSE_DATE_TIME)
+              );
+            } else {
+              setError({
+                state: true,
+                message: "Please select an exam mode",
+              });
+            }
+          }}
+        >
+          Proceed
+        </Button>
+      </div>
+    );
+  };
+
+  const ChooseDateTimeComponent = ({
+    label,
+    buttonLabel,
+    updateDate,
+    updateTime,
+  }) => {
+    return (
+      <div className="choose-date-time">
+        <h2>{label}</h2>
+        <div className="date-time-picker">
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <div className="date-picker">
+              <h3>Choose Date</h3>
+              <StaticDatePicker
+                orientation="landscape"
+                sx={{
+                  width: "100%",
+                  height: "100%",
+                }}
+                onChange={(e) => {
+                  console.log("Date changed -> ", e.toDate());
+                }}
+              />
+            </div>
+            <div className="time-picker">
+              <h3>Choose Time</h3>
+              <StaticTimePicker
+                onChange={(e) => {
+                  console.log("Time changed -> ", e.toDate());
+                }}
+                sx={{
+                  alignSelf: "left",
+                }}
+                orientation="landscape"
+              />
+            </div>
+          </LocalizationProvider>
+        </div>
+        <Button variant="contained" color="success" onClick={() => {}}>
+          {buttonLabel}
+        </Button>
+      </div>
+    );
+  };
+
+  const handleBackArrowOp = () => {
+    setExamCreationPhase((prev) => Math.max(prev - 1, 0));
+  };
+
+  if (true) {
+    let componentHolder = "Error";
+    let iconType = "Back";
+    if (examCreationPhase === EXAM_CREATION_PHASE.INTRO) {
+      iconType = "Home";
+      componentHolder = (
+        <div className="exam-flow">
+          <h1>Exam Creation</h1>
+          <h2>
+            Create exams for any subject and mode, tailored to your students'
+            needs. The test will appear on the students' dashboard with the
+            specified timings and will be accessible when the scheduled time
+            arrives.
+          </h2>
+          <Button
+            variant="contained"
+            color="success"
+            onClick={() => {
+              callSetStateWithBackdrop(() =>
+                setExamCreationPhase(EXAM_CREATION_PHASE.CHOOSE_SUBJECT)
+              );
+            }}
+          >
+            Get Started
+          </Button>
+        </div>
+      );
+    } else if (examCreationPhase === EXAM_CREATION_PHASE.CHOOSE_SUBJECT) {
+      componentHolder = (
+        <ChooseSubjectComponent
+          subjectList={getList()}
+          selectedSubject={subject}
+          updateSelectedSubject={set_Subject}
+        />
+      );
+    } else if (examCreationPhase === EXAM_CREATION_PHASE.CHOOSE_MODE) {
+      componentHolder = (
+        <ChooseExamModeComponent
+          examMode={ExamTakingMode}
+          updateExamMode={set_Mode}
+        />
+      );
+    } else if (examCreationPhase === EXAM_CREATION_PHASE.CHOOSE_DATE_TIME) {
+      componentHolder = (
+        <ChooseDateTimeComponent
+          label={"Choose Start Date & Time"}
+          buttonLabel={"Proceed"}
+        />
+      );
+    }
+    return (
+      <>
+        <Backdrop
+          sx={(theme) => ({ color: "#fff", zIndex: theme.zIndex.drawer + 1 })}
+          open={showBackdrop}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+        <div className="exam-flow-main-container">
+          <div className="exam-flow-navigator">
+            {iconType === "Home" ? (
+              <HomeIcon onClick={() => (window.location.href = "/")}/>
+            ) : (
+              <ArrowBackIcon onClick={handleBackArrowOp} />
+            )}
+          </div>
+          {componentHolder}
+        </div>
+      </>
+    );
+  }
+
   return (
     <div className="examDetails">
       <div className="exMD_title">
-        <img
-          src={Arrow}
-          alt="<-"
-          onClick={() => (window.location.href = "/dashboard")}
-        />
         <h1> Exam Details </h1>
       </div>
       <div className="exD_1">
-        <h2> Choose Subject </h2>
         <Dropdown
-          list={getList()}
-          value={subject}
-          onChangeCallback={(e) => {
-            set_Subject(e.target.value);
-          }}
+          label={"Choose Subject"}
+          itemList={getList()}
+          valueHandler={[subject, set_Subject]}
         />
       </div>
       <div className="exD_mode">
-        <h2 className="exD_tl_2">
-          Choose Mode of Exam taking(MCQs are available by default)
-        </h2>
         <Dropdown
-          list={["Typed", "Hand Written(via image upload)"]}
-          value={ExamTakingMode}
-          onChangeCallback={(e) => {
-            set_Mode(e.target.value);
-          }}
+          label={"Mode of Exam"}
+          itemList={["Typed", "Hand Written(via image upload)"]}
+          valueHandler={[ExamTakingMode, set_Mode]}
         />
       </div>
       <div className="pub_1">
