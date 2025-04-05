@@ -58,7 +58,6 @@ const Dashboard = () => {
   };
 
   const renderAccordion = ({ title, children, onChangeCallback }) => {
-    console.log(">> children", children);
     return (
       <Accordion
         sx={{
