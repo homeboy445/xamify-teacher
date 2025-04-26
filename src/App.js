@@ -18,7 +18,7 @@ const App = () => {
     is: false,
     info: "Testing...",
   });
-  const url = "http://localhost:8000/api";
+  const url = process.env.SERVER_URL;
 
   const RefreshAccessToken = () => {
     let refCookie = sessionStorage.getItem("refresher");
