@@ -163,3 +163,91 @@
 }
 
 
+/* NEW SECTION */
+
+.exam-flow-main-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: var(--bg-primary-color);
+  overflow: hidden;
+}
+
+.exam-flow-navigator {
+  position: fixed;
+  top: 3%;
+  left: 2%;
+  transform: scale(1.5);
+  cursor: pointer;
+}
+
+.exam-flow, .choose-subject, .choose-exam-mode {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  min-height: 50vh;
+}
+
+.exam-flow > h1 {
+  font-size: 4rem;
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.exam-flow > h2 {
+  font-weight: 400;
+  width: 70%;
+  line-height: 40px;
+  margin-bottom: 5%;
+}
+
+.choose-subject, .choose-exam-mode {
+  justify-content: center;
+  align-items: center;
+}
+
+.choose-subject > button, .choose-exam-mode > button {
+  margin-top: 2%;
+}
+
+#mainLabel {
+  color: var(--primary-color);
+  font-size: 3rem;
+  font-weight: 500;
+}
+
+.dropdown-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 5%;
+}
+
+.date-picker, .time-picker {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.date-picker-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin-top: 5%;
+  margin-bottom: 2%;
+}
+
+.time-picker-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 40%;
+  margin-top: 5%;
+  margin-bottom: 2%;
+}

@@ -92,7 +92,7 @@ const ExamCreator = (props) => {
         set_MxChoice(questions[idx].choices.length);
       }
     }
-  }, [questions, AddProblemBoxOpen, Main]);
+  }, [questions, AddProblemBoxOpen]);
 
   return (
     <div className="examCreator">

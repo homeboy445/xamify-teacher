@@ -85,7 +85,7 @@ const CoursePage = () => {
       }
     }
     update_List(obj);
-  }, [course, searchQuery, Main]);
+  }, [course, searchQuery]);
 
   return (
     <div className="stud-page">
@@ -184,6 +184,7 @@ const CoursePage = () => {
                 <Card
                   key={index}
                   type="course"
+                  image={Main.getCourseImageUrl(item.name)}
                   Name={item.name}
                   Creds={[`${getMaxYear(item.years)} year course`]}
                   callBack={() => {

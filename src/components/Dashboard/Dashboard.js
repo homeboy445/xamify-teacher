@@ -2,8 +2,33 @@ import React, { useState, useEffect, useContext } from "react";
 import "./Dashboard.css";
 import AuthContext from "../../Context";
 import axios from "axios";
-import Arrow_Down from "../../assets/Images/arrow-down(white).png";
 import { Link } from "react-router-dom";
+import Accordion from "@mui/material/Accordion";
+import { styled } from "@mui/material/styles";
+import Dialog from "@mui/material/Dialog";
+import Button from "@mui/material/Button";
+import AccordionSummary from "@mui/material/AccordionSummary";
+import AccordionDetails from "@mui/material/AccordionDetails";
+import Typography from "@mui/material/Typography";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import DialogTitle from "@mui/material/DialogTitle";
+import DialogContent from "@mui/material/DialogContent";
+import DialogActions from "@mui/material/DialogActions";
+import IconButton from "@mui/material/IconButton";
+import CloseIcon from "@mui/icons-material/Close";
+
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialog-paper': {
+    width: '40%', // Set your desired width here
+    maxWidth: 'none', // Optional: disables default max-width
+  },
+  "& .MuiDialogContent-root": {
+    padding: theme.spacing(2),
+  },
+  "& .MuiDialogActions-root": {
+    padding: theme.spacing(1),
+  },
+}));
 
 const Dashboard = () => {
   const Main = useContext(AuthContext);
@@ -30,6 +55,104 @@ const Dashboard = () => {
       d2 = new Date(obj.endTime);
     let diff = Math.floor((d2 - d1) / 60e3);
     return `${Math.floor(diff / 60)} hours ${diff % 60} minutes`;
+  };
+
+  const renderAccordion = ({ title, children, onChangeCallback }) => {
+    return (
+      <Accordion
+        sx={{
+          height: "100%",
+          color: "white",
+          border: "1px solid cyan",
+        }}
+        disabled={children.length === 0 || children[0] === null}
+        onChange={onChangeCallback}
+      >
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon sx={{ color: "white" }} />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+          sx={{
+            fontFamily: "Roboto",
+            background: "var(--primary-color)",
+          }}
+        >
+          <Typography sx={{ fontSize: "2rem" }} component="span">
+            {title}
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>{children}</AccordionDetails>
+      </Accordion>
+    );
+  };
+
+  const renderExamDetailsDialogBox = ({
+    showDialog = false,
+    handleClose = () => {},
+  }) => {
+    if (!DetailBox.is) {
+      return null;
+    }
+    return (
+      <BootstrapDialog
+        onClose={handleClose}
+        aria-labelledby="customized-dialog-title"
+        open={showDialog}
+      >
+        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+          Exam Details
+        </DialogTitle>
+        <IconButton
+          aria-label="close"
+          onClick={handleClose}
+          sx={(theme) => ({
+            position: "absolute",
+            right: 8,
+            top: 8,
+            color: theme.palette.grey[500],
+          })}
+        >
+          <CloseIcon />
+        </IconButton>
+        <DialogContent dividers>
+          <Typography gutterBottom>
+            <h2 className="detail-section">
+              Date of the Exam: 
+              <span>
+                {`${new Date(
+                  DetailBox.object.startTime
+                ).toDateString()} (${new Date(
+                  DetailBox.object.startTime
+                ).toLocaleTimeString()})`}
+              </span>
+            </h2>
+          </Typography>
+          <Typography gutterBottom>
+            <h2 className="detail-section">
+              Duration of the Exam: 
+              <span> {getDuration(DetailBox.object)} </span>
+            </h2>
+          </Typography>
+          <Typography gutterBottom>
+            <h2 className="detail-section">
+              Subject of the Exam: 
+              <span> {DetailBox.object.subject.name} </span>
+            </h2>
+          </Typography>
+          <Typography gutterBottom>
+            <h2 className="detail-section">
+              For students of year: 
+              <span> {DetailBox.object.subject.year.label} </span>
+            </h2>
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button autoFocus onClick={handleClose}>
+            Understood
+          </Button>
+        </DialogActions>
+      </BootstrapDialog>
+    );
   };
 
   useEffect(() => {
@@ -78,57 +201,12 @@ const Dashboard = () => {
 
   return (
     <div className="dashboard">
-      <div
-        className="detailBox"
-        style={{
-          transform: DetailBox.is ? "scale(1)" : "scale(0)",
-          pointerEvents: DetailBox.is ? "all" : "none",
-          transition: "0.6s ease",
-          opacity: DetailBox.is ? 1 : 0,
-        }}
-      >
-        <h1> Exam Details </h1>{" "}
-        {AssessmentGrouped.length > 0 ? (
-          <div>
-            <h2>
-              Date of the Exam:{" "}
-              <span>
-                {`${new Date(DetailBox.object.startTime).toDateString()} (${new Date(DetailBox.object.startTime).toLocaleTimeString()})`}{" "}
-              </span>{" "}
-            </h2>{" "}
-            <h2>
-              Duration of the Exam:{" "}
-              <span> {getDuration(DetailBox.object)} </span>{" "}
-            </h2>{" "}
-            <h2>
-              Subject of the Exam:{" "}
-              <span> {DetailBox.object.subject.name} </span>{" "}
-            </h2>{" "}
-            <h2>
-              For students of year:{" "}
-              <span> {DetailBox.object.subject.year.label} </span>{" "}
-            </h2>{" "}
-          </div>
-        ) : null}{" "}
-        <button
-          className="dtl_btn"
-          onClick={() => {
-            toggleDetailBox({
-              is: false,
-              object: {
-                subject: {
-                  name: "empty",
-                  year: { label: "1st year" },
-                },
-                startTime: new Date().toISOString(),
-                endTime: new Date().toISOString(),
-              },
-            });
-          }}
-        >
-          Ok{" "}
-        </button>{" "}
-      </div>{" "}
+      {renderExamDetailsDialogBox({
+        showDialog: DetailBox.is,
+        handleClose: () => {
+          toggleDetailBox({ is: false, object: {} });
+        },
+      })}
       <div
         className="db-titl"
         style={{
@@ -149,174 +227,156 @@ const Dashboard = () => {
         }}
       >
         <div className="Active">
-          <div
-            className="Active_1"
-            onClick={() => {
+          {renderAccordion({
+            title: "Active Tests",
+            onChangeCallback: () => {
               set_SActive(!Show_Active);
-            }}
-          >
-            <h1> Active Tests </h1>{" "}
-            <img
-              src={Arrow_Down}
-              alt="\/"
-              style={{
-                transform: Show_Active ? "rotate(180deg)" : "rotate(0deg)",
-                transition: "0.1s ease",
-              }}
-            />{" "}
-          </div>{" "}
-          {AssessmentGrouped.map((item, index) => {
-            if (!("active" in item)) {
-              return null;
-            }
-            return (
-              <div
-                key={index}
-                className="db-card"
-                style={{
-                  transform: !Show_Active
-                    ? `translate(0%,${-20 - index * 25}%)`
-                    : "translate(0%,0%)",
-                  opacity: Show_Active ? 1 : 0,
-                  marginBottom: Show_Active ? "0%" : "-14%",
-                  transition: "0.8s ease",
-                  backgroundColor: !Show_Active ? "transparent" : "#cde4f6",
-                }}
-              >
-                <h2> {item.active.subject.name} </h2>{" "}
-                <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
-                <p
-                  onClick={() => {
-                    let obj = AllAssessment.find(
-                      (item1) => item1.id === item.active.id
-                    );
-                    toggleDetailBox({ is: true, object: obj });
-                  }}
-
-                  style={{marginRight:"1rem", color:"darkblue", fontWeight:"bolder"}}
-                >
-                  Info
-                </p>
-                <Link to={`/submissions/${item.active.id}`} style={{ textDecoration: 'none' }}>
-                <p
-                  style={{marginRight:"0.5rem", color:"darkgreen",fontWeight:"bolder"}}
-                >
-                  Submissions{" "}
-                </p></Link>{" "}</div>
-              </div>
-            );
-          })}{" "}
-        </div>{" "}
+            },
+            children: AssessmentGrouped.map((item, index) => {
+              if (!("active" in item)) {
+                return null;
+              }
+              return (
+                <div key={index} className="db-card">
+                  <h2> {item.active.subject.name} </h2>{" "}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <p
+                      onClick={() => {
+                        let obj = AllAssessment.find(
+                          (item1) => item1.id === item.active.id
+                        );
+                        toggleDetailBox({ is: true, object: obj });
+                      }}
+                      style={{
+                        marginRight: "1rem",
+                        color: "darkblue",
+                        fontWeight: "bolder",
+                      }}
+                    >
+                      Info
+                    </p>
+                    <Link
+                      to={`/submissions/${item.active.id}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <p
+                        style={{
+                          marginRpight: "0.5rem",
+                          color: "darkgreen",
+                          fontWeight: "bolder",
+                        }}
+                      >
+                        Submissions{" "}
+                      </p>
+                    </Link>{" "}
+                  </div>
+                </div>
+              );
+            }),
+          })}
+        </div>
         <div className="Upcoming">
-          <div
-            className="Upcoming_1"
-            onClick={() => {
+          {renderAccordion({
+            title: "Upcoming Tests",
+            onChangeCallback: () => {
               set_SUpcoming(!Show_Upcoming);
-            }}
-          >
-            <h1> Upcoming Tests </h1>{" "}
-            <img
-              src={Arrow_Down}
-              alt="\/"
-              style={{
-                transform: Show_Upcoming ? "rotate(180deg)" : "rotate(0deg)",
-                transition: "0.1s ease",
-              }}
-            />{" "}
-          </div>{" "}
-          {AssessmentGrouped.map((item, index) => {
-            if (!("upcoming" in item)) {
-              return null;
-            }
-            return (
-              <div
-                key={index}
-                className="db-card"
-                style={{
-                  transform: !Show_Upcoming
-                    ? `translate(0%,${-30 - index * 25}%)`
-                    : "translate(0%,10%)",
-                  opacity: Show_Upcoming ? 1 : 0,
-                  marginBottom: Show_Upcoming ? "0%" : "-10%",
-                  transition: "0.8s ease",
-                  backgroundColor: !Show_Upcoming ? "transparent" : "#cde4f6",
-                }}
-              >
-                <h2> {item.upcoming.subject.name} </h2>{" "}
-                <p
-                  onClick={() => {
-                    let obj = AllAssessment.find(
-                      (item1) => item1.id === item.upcoming.id
-                    );
-                    toggleDetailBox({ is: true, object: obj });
-                  }}
-                >
-                  Details{" "}
-                </p>{" "}
-              </div>
-            );
-          })}{" "}
-        </div>{" "}
+            },
+            children: AssessmentGrouped.map((item, index) => {
+              if (!("upcoming" in item)) {
+                return null;
+              }
+              return (
+                <div key={index} className="db-card">
+                  <h2> {item.upcoming.subject.name} </h2>
+                  <p
+                    onClick={() => {
+                      let obj = AllAssessment.find(
+                        (item1) => item1.id === item.upcoming.id
+                      );
+                      toggleDetailBox({ is: true, object: obj });
+                    }}
+                  >
+                    Details
+                  </p>
+                </div>
+              );
+            }),
+          })}
+        </div>
         <div className="Attempted">
-          <div
-            className="Attempted_1"
-            onClick={() => {
+          {renderAccordion({
+            title: "Previously hosted tests",
+            onChangeCallback: () => {
               set_PAttempted(!Show_Previous);
-            }}
-          >
-            <h1> Previously hosted tests </h1>{" "}
-            <img
-              src={Arrow_Down}
-              alt="\/"
-              style={{
-                transform: Show_Previous ? "rotate(180deg)" : "rotate(0deg)",
-                transition: "0.1s ease",
-              }}
-            />{" "}
-          </div>{" "}
-          {AssessmentGrouped.map((item, index) => {
-            if (!("previous" in item)) {
-              return null;
-            }
-            return (
-              <div
-                key={index}
-                className="db-card"
-                style={{
-                  transform: !Show_Previous
-                    ? `translate(0%,${-20 - index * 25}%)`
-                    : "translate(0%,0%)",
-                  opacity: Show_Previous ? 1 : 0,
-                  marginBottom: Show_Previous ? "0%" : "-25%",
-                  transition: "0.8s ease",
-                  backgroundColor: !Show_Previous ? "transparent" : "#cde4f6",
-                }}
-              >
-                <h2> {item.previous.subject.name} </h2>{" "}
-                <div style={{display:"flex", flexDirection:"row", alignItems:"center"}}>
-                <p
-                  onClick={() => {
-                    let obj = AllAssessment.find(
-                      (item1) => item1.id === item.previous.id
-                    );
-                    toggleDetailBox({ is: true, object: obj });
+            },
+            children: AssessmentGrouped.map((item, index) => {
+              if (!("previous" in item)) {
+                return null;
+              }
+              return (
+                <div
+                  key={index}
+                  className="db-card"
+                  style={{
+                    transform: !Show_Previous
+                      ? `translate(0%,${-20 - index * 25}%)`
+                      : "translate(0%,0%)",
+                    opacity: Show_Previous ? 1 : 0,
+                    marginBottom: Show_Previous ? "0%" : "-25%",
+                    transition: "0.8s ease",
+                    backgroundColor: !Show_Previous ? "transparent" : "#cde4f6",
                   }}
-
-                  style={{marginRight:"1rem", color:"darkblue", fontWeight:"bolder"}}
                 >
-                  Details
-                </p>
-                <Link to={`/submissions/${item.previous.id}`} style={{ textDecoration: 'none' }}>
-                <p
-                  style={{marginRight:"0.5rem", color:"darkgreen",fontWeight:"bolder"}}
-                >
-                  Submissions{" "}
-                </p></Link>{" "}</div>
-              </div>
-            );
-          })}{" "}
-        </div>{" "}
-      </div>{" "}
+                  <h2> {item.previous.subject.name} </h2>{" "}
+                  <div
+                    style={{
+                      display: "flex",
+                      flexDirection: "row",
+                      alignItems: "center",
+                    }}
+                  >
+                    <p
+                      onClick={() => {
+                        let obj = AllAssessment.find(
+                          (item1) => item1.id === item.previous.id
+                        );
+                        toggleDetailBox({ is: true, object: obj });
+                      }}
+                      style={{
+                        marginRight: "1rem",
+                        color: "darkblue",
+                        fontWeight: "bolder",
+                      }}
+                    >
+                      Details
+                    </p>
+                    <Link
+                      to={`/submissions/${item.previous.id}`}
+                      style={{ textDecoration: "none" }}
+                    >
+                      <p
+                        style={{
+                          marginRight: "0.5rem",
+                          color: "darkgreen",
+                          fontWeight: "bolder",
+                        }}
+                      >
+                        Submissions{" "}
+                      </p>
+                    </Link>{" "}
+                  </div>
+                </div>
+              );
+            }),
+          })}
+        </div>
+      </div>
     </div>
   );
 };

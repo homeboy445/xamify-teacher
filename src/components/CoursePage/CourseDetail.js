@@ -88,7 +88,7 @@ const CourseDetail = (props) => {
           Main.RefreshAccessToken();
         });
     }
-  }, [courseDetails, Main]);
+  }, [courseDetails]);
 
   return (
     <div className="stud-page">
