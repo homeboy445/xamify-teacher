@@ -6,24 +6,34 @@
     font-family: 'Roboto', sans-serif;
 */
 .home-mainer {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* or set a fixed height */
   overflow: hidden;
 }
 #myVideo {
-  width: 100%;
-  background-position: center center;
-  position: fixed;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: auto;
+  height: auto;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  object-fit: cover;
 }
 .home-content {
-  position: absolute;
-  top: 0%;
   z-index: 100000;
-  left: 0%;
   background: rgba(0, 0, 0, 0.5);
   width: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  color: white;
+  height: 100vh;
 }
 .home-content > .hc-sub1 {
   display: flex;
