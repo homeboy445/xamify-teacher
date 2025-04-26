@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import "./SignIn.css";
 import axios from "axios";
+import AuthContext from "../../Context";
 import InputBox from "../sub_components/InputBox/InputBox";
 
 const SignIn = ({ HandleAuth }) => {
   const [email, set_email] = useState("");
   const [password, set_password] = useState("");
+  const { url } = useContext(AuthContext); // Accessing apiUrl from AuthContext
 
   const HandleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:8000/api/auth/login", {
+      .post(`${url}/auth/login`, {
         email: email,
         password: password,
       })
