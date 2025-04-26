@@ -18,7 +18,7 @@ const App = () => {
     is: false,
     info: "Testing...",
   });
-  const url = process.env.SERVER_URL;
+  const url = process.env.REACT_SERVER_URL;
 
   const RefreshAccessToken = () => {
     let refCookie = sessionStorage.getItem("refresher");
